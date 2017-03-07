@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Hazard Protector Client</string>
+    <string name="connected_google_api">Connected to google api</string>
+    <string name="connected_google_api_main">Connected to Google API in Main Activity</string>
+    <string name="connection_suspended">Connection suspended</string>
+    <string name="connection_failed">Connection failed</string>
+    <string name="firstname_missing">Please enter your firstname</string>
+    <string name="surname_missing">Please enter your surname</string>
+
+    <string-array name="radiusOptions">
+        <item>50 KM</item>
+        <item>100 KM</item>
+        <item>200 KM</item>
+        <item>500 KM</item>
+        <item>1000+ KM</item>
+    </string-array>
 </resources>

@@ -15,16 +15,22 @@ import static org.jsoup.Jsoup.connect;
 
 public class RegisterUser implements Callable<DbResponse>
 {
-    private String firstname, surname, gcmId;
-    double latitude = 0, longitude = 0;
+    private String firstname, surname, gcmId, terror, flood, war, earthquake;
+    private int radius, colourCode;
+    private JSONObject preferences;
 
-    public RegisterUser(String firstname, String surname, String gcmId, double latitude, double longitude)
+    public RegisterUser(String firstname, String surname, String gcmId, String terror, String flood,
+       String war, String earthquake, int radius, int colourCode)
     {
         this.firstname = firstname;
         this.surname = surname;
         this.gcmId = gcmId;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.terror = terror;
+        this.flood = flood;
+        this.war = war;
+        this.earthquake = earthquake;
+        this.radius = radius;
+        this.colourCode = colourCode;
     }
     @Override
     public DbResponse call() throws Exception {
@@ -32,6 +38,12 @@ public class RegisterUser implements Callable<DbResponse>
                 .data("firstname", firstname)
                 .data("surname", surname)
                 .data("gcmId", gcmId)
+                .data("terror", terror)
+                .data("flood", flood)
+                .data("war", war)
+                .data("earthquake", earthquake)
+                .data("radius", String.valueOf(radius))
+                .data("colourCode", String.valueOf(colourCode))
                 .userAgent("Mozilla")
                 .post();
 
@@ -39,7 +51,6 @@ public class RegisterUser implements Callable<DbResponse>
         DbResponse dbResponse = new DbResponse();
         dbResponse.setMsg(response.getString("msg"));
         dbResponse.setStatus(response.getInt("status"));
-        System.out.println(dbResponse.toString());
         return dbResponse;
     }
 }

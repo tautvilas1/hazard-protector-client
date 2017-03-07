@@ -42,6 +42,7 @@ public class GetUser implements Callable<User>
             Document doc = connect("http://t-simkus.com/final_project/getUser")
                     .data("gcmId", gcmId)
                     .userAgent("Mozilla")
+                    .timeout(1800000)
                     .post();
 
 

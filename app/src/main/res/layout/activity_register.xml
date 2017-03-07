@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_register"
     android:layout_width="match_parent"
@@ -14,8 +15,10 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true">
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:weightSum="1">
 
         <EditText
             android:layout_width="match_parent"
@@ -34,11 +37,133 @@
             android:ems="10"
             android:id="@+id/txtSurname" />
 
-        <Button
-            android:text="Finish"
+        <TextView
+            android:id="@+id/txtPreferences"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Include in my news feed"
+            android:textColor="@android:color/black"
+            android:textSize="22sp" />
+
+        <GridLayout
+            android:id="@+id/gdPreferences"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:id="@+id/ckFlood"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_row="0"
+                android:checked="true"
+                android:text="Flooding news" />
+
+            <CheckBox
+                android:id="@+id/ckWar"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_row="1"
+                android:checked="true"
+                android:text="War news" />
+
+            <CheckBox
+                android:id="@+id/ckEarthquake"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_row="1"
+                android:checked="true"
+                android:text="Earthquake news" />
+
+            <CheckBox
+                android:id="@+id/ckTerror"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:checked="true"
+                android:text="Terror news" />
+        </GridLayout>
+
+        <TextView
+            android:id="@+id/txtDesign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Select your design colour"
+            android:textColor="@android:color/black"
+            android:textSize="22sp" />
+
+        <GridLayout
+            android:id="@+id/gdColours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.24">
+
+            <ImageButton
+                android:id="@+id/red"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/circle_red" />
+
+            <ImageButton
+                android:id="@+id/orange"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/circle_orange" />
+
+            <ImageButton
+                android:id="@+id/green"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_column="6"
+                android:layout_row="0"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/circle_green" />
+
+            <ImageButton
+                android:id="@+id/blue"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:layout_row="0"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/circle_blue" />
+        </GridLayout>
+
+        <TextView
+            android:id="@+id/txtRadius"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Select radius for which you want us to alert you for any hazards"
+            android:textColor="@android:color/black"
+            android:textSize="22sp" />
+
+        <Spinner
+            android:id="@+id/selRadius"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:entries="@array/radiusOptions" />
+
+        <Button
             android:id="@+id/btnRegister"
-            android:onClick="registerUser" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:onClick="registerUser"
+            android:text="Finish" />
+
     </LinearLayout>
 </RelativeLayout>

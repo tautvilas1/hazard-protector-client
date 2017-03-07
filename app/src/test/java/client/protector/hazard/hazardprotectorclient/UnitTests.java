@@ -11,6 +11,8 @@ import client.protector.hazard.hazardprotectorclient.model.Common.DbResponse;
 import client.protector.hazard.hazardprotectorclient.model.User.RegisterUser;
 
 import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
 import org.junit.runner.RunWith;
@@ -50,15 +52,15 @@ public class UnitTests
             e.printStackTrace();
         }
 
-        when(response.getStatus())
-                .thenReturn(FAKE_STRING);
-        ClassUnderTest myObjectUnderTest = new ClassUnderTest(mMockContext);
-
-        // ...when the string is returned from the object under test...
-        String result = myObjectUnderTest.getHelloWorldString();
+//        when(response.getStatus())
+//                .thenReturn(FAKE_STRING);
+//        ClassUnderTest myObjectUnderTest = new ClassUnderTest(mMockContext);
+//
+//        // ...when the string is returned from the object under test...
+//        String result = myObjectUnderTest.getHelloWorldString();
 
         // ...then the result should be the expected one.
-        assertThat(result, is(FAKE_STRING));
+        assertThat(response.getStatus(), is(200));
 
         if(response != null)
         {
