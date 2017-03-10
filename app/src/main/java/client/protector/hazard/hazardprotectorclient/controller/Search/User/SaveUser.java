@@ -32,15 +32,20 @@ public class SaveUser implements Callable<DbResponse>
                 .data("gcm_id", user.getGcm_id())
                 .data("latitude", Double.toString(user.getLatitude()))
                 .data("longitude", Double.toString(user.getLongitude()))
-//                .data("preferences", user.getPreferences().toString())
+                .data("terror", user.getTerror())
+                .data("flood", user.getFlood())
+                .data("war", user.getWar())
+                .data("earthquake", user.getEarthquake())
+                .data("colourCode", String.valueOf(user.getColourCode()))
+                .data("radius", String.valueOf(user.getRadius()))
                 .userAgent("Mozilla")
+                .timeout(10000)
                 .post();
 
         JSONObject response = new JSONObject(doc.body().text());
         DbResponse dbResponse = new DbResponse();
         dbResponse.setMsg(response.getString("msg"));
         dbResponse.setStatus(response.getInt("status"));
-        System.out.println(dbResponse.toString());
         return dbResponse;
     }
 }

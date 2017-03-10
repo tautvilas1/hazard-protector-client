@@ -12,14 +12,21 @@ import client.protector.hazard.hazardprotectorclient.controller.Search.User.Save
 import client.protector.hazard.hazardprotectorclient.model.Common.DbResponse;
 
 /**
- * Created by deadlylife on 11/02/2017.
+ * Created by Tautvilas on 11/02/2017.
  */
 
 public class User implements Serializable
 {
 
-    public String firstname, surname, gcm_id, terror, flood, war, earthquake;
-    public int radius;
+    public String firstname = "", surname = "", gcm_id = "", terror = "true", flood = "true", war = "true", earthquake = "true";
+    public int radius = 1000;
+    public int colourCode = 0;
+    double latitude = 0, longitude = 0;
+
+    public User()
+    {
+
+    }
 
     public String getTerror() {
         return terror;
@@ -59,14 +66,6 @@ public class User implements Serializable
 
     public void setColourCode(int colourCode) {
         this.colourCode = colourCode;
-    }
-
-    public int colourCode;
-    double latitude, longitude;
-
-    public User()
-    {
-
     }
 
     public String getFirstname() {

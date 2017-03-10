@@ -5,8 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
-import android.os.AsyncTask;
+import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -20,23 +21,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -49,21 +51,31 @@ import client.protector.hazard.hazardprotectorclient.controller.Search.Image.Loa
 import client.protector.hazard.hazardprotectorclient.controller.Search.Search.Finder;
 import client.protector.hazard.hazardprotectorclient.model.Articles.Article;
 import client.protector.hazard.hazardprotectorclient.model.Articles.TableArticle;
-import client.protector.hazard.hazardprotectorclient.model.User.GetUser;
+import client.protector.hazard.hazardprotectorclient.model.Location.H_LocationBuilder;
+import client.protector.hazard.hazardprotectorclient.model.Location.H_LocationRequest;
+import client.protector.hazard.hazardprotectorclient.model.Location.H_LocationStatus;
 import client.protector.hazard.hazardprotectorclient.model.User.User;
 
-public class MainActivity extends AppCompatActivity implements LocationListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, Observer
+{
 
+    public Context context = this;
+
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     private ArrayList<Article> articlesList = new ArrayList<Article>();
     private App app;
     private User user;
     private GoogleApiClient googleApiClient;
-    public Context context = this;
 
-    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     private Location location;
-    private boolean canGetLocation = false;
+    private LocationRequest locationRequest;
+    private LocationSettingsRequest.Builder locationBuilder;
+    private H_LocationStatus locationStatus = new H_LocationStatus();
+    private LocationManager locationManager;
+    private Criteria criteria;
+
+    private String provider;
 
 
     @Override
@@ -73,27 +85,34 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         Intent intent = getIntent();
         user = (User) intent.getExtras().getSerializable("user");
         getSupportActionBar().setTitle("Hey, " + user.getFirstname());
+
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-        promptLocationServices();
-//        user.setFirstname("test");
-//        user.setLatitude(4.0055);
-//        user.setLongitude(4.9922);
-//
-//        user.save();
 
+
+        locationStatus.addObserver(this);
+        buildLocationManager();
+        buildLocationServices();
+        promptLocationServices();
+//        getLocation();
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        if (user != null) {
-            user.setLatitude(location.getLatitude());
-            user.setLongitude(location.getLongitude());
-            System.out.println("latitude" + user.getLatitude());
-        }
+    public void buildLocationServices()
+    {
+        H_LocationRequest H_locationRequest = new H_LocationRequest();
+        locationRequest = H_locationRequest.locationRequest;
+        H_LocationBuilder H_locationBuilder = new H_LocationBuilder(locationRequest);
+        locationBuilder = H_locationBuilder.builder;
+    }
+
+    public void buildLocationManager()
+    {
+        criteria = new Criteria();
+        locationManager = (LocationManager) getSystemService(context.LOCATION_SERVICE);
+        provider = locationManager.getBestProvider(criteria,false);
     }
 
     @Override
@@ -109,80 +128,87 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
+    public void onConnected(@Nullable Bundle bundle)
+    {
         Toast.makeText(this, R.string.connected_google_api_main, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        System.out.println("Connection suspended");
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        System.out.println("Connection failed " + connectionResult.toString());
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //result code -1 is ok
-        if (resultCode == -1) {
-            canGetLocation = true;
+        if(servicesAvailable())
+        {
+            getLocation();
         }
-        System.out.println(requestCode + " " + resultCode + " " + data);
     }
 
-//    public void requestLocation() {
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-//                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-//                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            promptLocationServices();
-//        } else {
-//            canGetLocation = true;
-//        }
-//
-//
-//    }
+    public void getLocation()
+    {
+        if (locationStatus.canGetLocation)
+        {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                Log.d("log", "Something's wrong with permissions");
+                return;
+            }
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult result)
+                {
+                    location = result.getLastLocation();
+                    user.setLatitude(location.getLatitude());
+                    user.setLongitude(location.getLongitude());
+                    user.save();
+                }
 
-    public void promptLocationServices() {
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(30 * 10000);
-        locationRequest.setFastestInterval(5 * 10000);
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest);
+                @Override
+                public void onLocationAvailability(LocationAvailability locationAvailability)
+                {
+                    Log.d("log","onLocationAvailability: isLocationAvailable =  " + locationAvailability.isLocationAvailable());
+                }
+            }, null);
 
-        builder.setAlwaysShow(true);
+        }
+    }
 
-        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+
+                    getLocation();
+
+                }
+                else {
+
+                    Log.d("log","permission denied");
+                }
+                return;
+            }
+        }
+    }
+
+    public void promptLocationServices()
+    {
+        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(googleApiClient, locationBuilder.build());
+        result.setResultCallback(new ResultCallback<LocationSettingsResult>()
+        {
             @Override
             public void onResult(LocationSettingsResult result) {
                 final Status status = result.getStatus();
-                switch (status.getStatusCode()) {
+                switch (status.getStatusCode())
+                {
                     case LocationSettingsStatusCodes.SUCCESS:
                         Log.d("log", "All location settings are satisfied.");
-                        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context,
-                                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-                        {
-                            return;
-                        }
-                        canGetLocation = true;
-                        location = LocationServices.FusedLocationApi.getLastLocation(
-                                googleApiClient);
-                        Log.d("log","location got");
-                        System.out.println(location.getLatitude()+" "+location.getLongitude());
-
+                        locationStatus.setCanGetLocation(true);
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        canGetLocation = false;
+                        locationStatus.setCanGetLocation(false);
                         Log.d("log", "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
                         try
                         {
-                            // Show the dialog by calling startResolutionForResult(), and check the result
-                            // in onActivityResult().
                             status.startResolutionForResult(MainActivity.this, 0);
                         }
                         catch (IntentSender.SendIntentException e)
@@ -191,12 +217,48 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                         }
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        canGetLocation = false;
+                        locationStatus.setCanGetLocation(false);
                         Log.d("log", "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
                         break;
+                    default:
+                        Log.d("log","default");
                 }
             }
         });
+    }
+
+
+
+    @Override
+    public void onConnectionSuspended(int i)
+    {
+        System.out.println("Connection suspended");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult)
+    {
+        System.out.println("Connection failed " + connectionResult.toString());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        //result code -1 is ok
+        if (resultCode == -1) {
+            locationStatus.setCanGetLocation(true);
+        }
+    }
+
+
+    @Override
+    public void update(Observable o, Object arg)
+    {
+        if(locationStatus.canGetLocation && servicesAvailable())
+        {
+            getLocation();
+        }
     }
 
 
@@ -275,6 +337,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
         catch (ExecutionException e) {
             e.printStackTrace();
+        }
+    }
+
+    private boolean servicesAvailable() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+
+        if (ConnectionResult.SUCCESS == resultCode)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
