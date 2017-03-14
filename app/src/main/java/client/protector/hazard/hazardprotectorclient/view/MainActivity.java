@@ -13,8 +13,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -26,6 +30,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -45,8 +50,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import client.protector.hazard.hazardprotectorclient.GooglePlay.RegistrationService;
 import client.protector.hazard.hazardprotectorclient.R;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
+import client.protector.hazard.hazardprotectorclient.controller.Search.Feed.LoadFeed;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Image.LoadImage;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Search.Finder;
 import client.protector.hazard.hazardprotectorclient.model.Articles.Article;
@@ -64,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     private ArrayList<Article> articlesList = new ArrayList<Article>();
-    private App app;
     private User user;
     private GoogleApiClient googleApiClient;
 
@@ -82,10 +88,19 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = getIntent();
-        user = (User) intent.getExtras().getSerializable("user");
+        startRegistrationService();
+        user = App.user;
+        Log.d("log",user.getFirstname() + " " + App.user.getFirstname());
         getSupportActionBar().setTitle("Hey, " + user.getFirstname());
-
+        Log.d("log" , "Static : "+user.getGcm_id());
+        try
+        {
+            loadFeed();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -98,6 +113,12 @@ public class MainActivity extends AppCompatActivity implements
         buildLocationServices();
         promptLocationServices();
 //        getLocation();
+    }
+
+    public void startRegistrationService()
+    {
+        Intent intent = new Intent(this,RegistrationService.class);
+        startService(intent);
     }
 
     public void buildLocationServices()
@@ -265,61 +286,45 @@ public class MainActivity extends AppCompatActivity implements
     public void loadFeed() throws IOException
     {
         getArticles();
-        String keywords[] = {"war","terror" ,"flood","hazard","earthquake","disaster"};
-
-        ExecutorService es = Executors.newSingleThreadExecutor();
-        Future f = es.submit(new Finder(keywords,articlesList));
-
-        ArrayList<Article> articlesListFiltered = new ArrayList<Article>();
-
-        try
+        if(articlesList.size() > 0)
         {
-            articlesListFiltered = (ArrayList<Article>) f.get();
-        }
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-        catch (ExecutionException e)
-        {
-            e.printStackTrace();
+            ListView articlesListView = (ListView) findViewById(R.id.articlesListView);
+            LoadFeed loadFeed = new LoadFeed(this,articlesList,articlesListView);
+            loadFeed.populateList();
         }
 
-        final TableLayout tableLayout = (TableLayout) findViewById(R.id.feedTable);
-
-        if(articlesListFiltered.size() != 0) {
-
-            for (int i = 0; i < 5; i++) {
-                // Creation row
-                final TableRow tableRow = new TableRow(this);
-                tableRow.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
-
-                Random r = new Random();
-
-                ImageView image = new ImageView(this);
-                image.setMinimumHeight(350);
-                image.setMinimumWidth(450);
-                image.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-                new LoadImage(articlesListFiltered.get(i).getThumbnail(),image).execute();
-
-                final TextView title = new TextView(this);
-                title.setText(articlesListFiltered.get(i).getTitle());
-                title.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-
-                final TextView text = new TextView(this);
-                text.setText(articlesListFiltered.get(i).getDescription());
-                text.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-
-                tableRow.addView(image);
-                tableRow.addView(title);
-//                tableRow.addView(text);
-
-                tableLayout.addView(tableRow);
-            }
-        }
-
-
-
+//        String keywords[] = {"war","terror" ,"flood","hazard","earthquake","disaster"};
+//
+//        ExecutorService es = Executors.newSingleThreadExecutor();
+//        Future f = es.submit(new Finder(keywords,articlesList));
+//
+//        ArrayList<Article> articlesListFiltered = new ArrayList<Article>();
+//
+//        try
+//        {
+//            articlesListFiltered = (ArrayList<Article>) f.get();
+//        }
+//        catch (InterruptedException e)
+//        {
+//            e.printStackTrace();
+//        }
+//        catch (ExecutionException e)
+//        {
+//            e.printStackTrace();
+//        }
+//        RelativeLayout container = (RelativeLayout) findViewById(R.id.activity_main);
+//
+//
+//        for(int i = 0; i < articlesListFiltered.size();i++)
+//        {
+//            Article article = articlesListFiltered.get(i);
+//            TextView txtLink = new TextView(this);
+//            txtLink.setClickable(true);
+//            txtLink.setMovementMethod(LinkMovementMethod.getInstance());
+//            String text = "<a href='"+article.getLink()+"'>"+article.getDescription()+"</a>";
+//            txtLink.setText(Html.fromHtml(text));
+//            container.addView(txtLink);
+//        }
     }
 
 

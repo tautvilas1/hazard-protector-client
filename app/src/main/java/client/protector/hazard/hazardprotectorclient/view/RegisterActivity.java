@@ -12,6 +12,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.iid.InstanceID;
+
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,6 +21,7 @@ import java.util.concurrent.Future;
 
 import client.protector.hazard.hazardprotectorclient.R;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Common.GoToMain;
+import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Listeners.ColourListener;
 import client.protector.hazard.hazardprotectorclient.model.Common.DbResponse;
 import client.protector.hazard.hazardprotectorclient.model.User.RegisterUser;
@@ -35,9 +38,9 @@ public class RegisterActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         getSupportActionBar().setTitle("Please enter a few details");
-        gcmId = getIntent().getStringExtra("gcmId");
-        btnRegister = (Button) findViewById(R.id.btnRegister);
         user = new User();
+        gcmId = InstanceID.getInstance(this).getId();
+        btnRegister = (Button) findViewById(R.id.btnRegister);
         addListeners();
     }
 
@@ -67,7 +70,7 @@ public class RegisterActivity extends AppCompatActivity
         String earthquake = String.valueOf(ckEarthquake.isChecked());
 
         ExecutorService es = Executors.newSingleThreadExecutor();
-        Future f = es.submit(new RegisterUser(firstname,surname,gcmId,terror,flood,war,earthquake,radius,user.getColourCode()));
+        Future f = es.submit(new RegisterUser(firstname,surname,gcmId,terror,flood,war,earthquake,radius,user.getColourCode(),null));
         try
         {
             btnRegister.setEnabled(false);
@@ -82,7 +85,9 @@ public class RegisterActivity extends AppCompatActivity
                 user.setWar(war);
                 user.setEarthquake(earthquake);
                 user.setRadius(radius);
-                GoToMain goToMain = new GoToMain(user,this);
+                user.save();
+                App.setUser(user);
+                GoToMain goToMain = new GoToMain(this);
             }
 
         }

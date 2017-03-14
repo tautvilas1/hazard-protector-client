@@ -15,12 +15,12 @@ import static org.jsoup.Jsoup.connect;
 
 public class RegisterUser implements Callable<DbResponse>
 {
-    private String firstname, surname, gcmId, terror, flood, war, earthquake;
+    private String firstname, surname, gcmId, terror, flood, war, earthquake, registrationId;
     private int radius, colourCode;
     private JSONObject preferences;
 
     public RegisterUser(String firstname, String surname, String gcmId, String terror, String flood,
-       String war, String earthquake, int radius, int colourCode)
+       String war, String earthquake, int radius, int colourCode, String registrationId)
     {
         this.firstname = firstname;
         this.surname = surname;
@@ -31,10 +31,11 @@ public class RegisterUser implements Callable<DbResponse>
         this.earthquake = earthquake;
         this.radius = radius;
         this.colourCode = colourCode;
+        this.registrationId = registrationId;
     }
     @Override
     public DbResponse call() throws Exception {
-        Document doc = connect("http://t-simkus.com/final_project/registerUser.php")
+        Document doc = connect("http://www.t-simkus.com/final_project/registerUser.php")
                 .data("firstname", firstname)
                 .data("surname", surname)
                 .data("gcmId", gcmId)
@@ -44,6 +45,7 @@ public class RegisterUser implements Callable<DbResponse>
                 .data("earthquake", earthquake)
                 .data("radius", String.valueOf(radius))
                 .data("colourCode", String.valueOf(colourCode))
+                .data("registrationId", String.valueOf(registrationId))
                 .userAgent("Mozilla")
                 .post();
 

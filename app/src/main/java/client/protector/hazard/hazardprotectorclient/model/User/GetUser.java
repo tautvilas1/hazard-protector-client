@@ -17,6 +17,7 @@ import java.util.concurrent.Callable;
  */
 
 
+import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
 import client.protector.hazard.hazardprotectorclient.model.Common.DbResponse;
 
 import static org.jsoup.Jsoup.connect;
@@ -25,8 +26,8 @@ import static org.jsoup.Jsoup.connect;
 public class GetUser implements Callable<User>
 {
 
-    Context context;
-    String gcmId;
+    private Context context;
+    private String gcmId;
 
     public GetUser(Context context,String gcmId)
     {
@@ -39,10 +40,10 @@ public class GetUser implements Callable<User>
         try
         {
 
-            Document doc = connect("http://t-simkus.com/final_project/getUser")
+            Document doc = connect("http://www.t-simkus.com/final_project/getUser")
                     .data("gcmId", gcmId)
                     .userAgent("Mozilla")
-                    .timeout(1800000)
+                    .timeout(20000)
                     .post();
 
 
@@ -50,6 +51,7 @@ public class GetUser implements Callable<User>
         }
         catch (IOException e)
         {
+            Log.d("log","connection timed out to t-simkus.com");
             e.printStackTrace();
         }
 
@@ -59,7 +61,7 @@ public class GetUser implements Callable<User>
 
     public User processResponse(String response)
     {
-        User user = null;
+        User user = new User();
         JSONObject jsonObject = null;
         try
         {
@@ -70,7 +72,6 @@ public class GetUser implements Callable<User>
 
             if(dbResponse.getStatus() == 200)
             {
-                user = new User();
                 user.setFirstname(jsonObject.getString("firstname"));
                 user.setSurname(jsonObject.getString("surname"));
                 user.setGcm_id(jsonObject.getString("gcm_id"));
@@ -80,6 +81,7 @@ public class GetUser implements Callable<User>
                 user.setEarthquake(jsonObject.getString("earthquake"));
                 user.setColourCode(Integer.parseInt(jsonObject.getString("colourCode")));
                 user.setRadius(Integer.parseInt(jsonObject.getString("radius")));
+                user.setRegistrationId(jsonObject.getString("registrationId"));
             }
 
         }

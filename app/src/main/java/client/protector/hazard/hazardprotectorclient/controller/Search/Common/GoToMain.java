@@ -14,10 +14,9 @@ import client.protector.hazard.hazardprotectorclient.view.MainActivity;
 
 public class GoToMain
 {
-    public GoToMain(User user,Context context)
+    public GoToMain(Context context)
     {
         Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra("user",user);
         context.startActivity(intent);
     }
 }

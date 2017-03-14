@@ -18,7 +18,15 @@ import client.protector.hazard.hazardprotectorclient.model.Common.DbResponse;
 public class User implements Serializable
 {
 
-    public String firstname = "", surname = "", gcm_id = "", terror = "true", flood = "true", war = "true", earthquake = "true";
+    public String firstname = "";
+    public String surname = "";
+    public String gcm_id = "";
+    public String terror = "true";
+    public String flood = "true";
+    public String war = "true";
+    public String earthquake = "true";
+
+    public String registrationId = "";
     public int radius = 1000;
     public int colourCode = 0;
     double latitude = 0, longitude = 0;
@@ -26,6 +34,13 @@ public class User implements Serializable
     public User()
     {
 
+    }
+    public String getRegistrationId() {
+        return registrationId;
+    }
+
+    public void setRegistrationId(String registrationId) {
+        this.registrationId = registrationId;
     }
 
     public String getTerror() {
@@ -127,6 +142,7 @@ public class User implements Serializable
                 ", flood='" + flood + '\'' +
                 ", war='" + war + '\'' +
                 ", earthquake='" + earthquake + '\'' +
+                ", registrationId='" + registrationId + '\'' +
                 ", radius=" + radius +
                 ", colourCode=" + colourCode +
                 ", latitude=" + latitude +

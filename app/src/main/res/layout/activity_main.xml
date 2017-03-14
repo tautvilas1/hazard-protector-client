@@ -11,38 +11,21 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="client.protector.hazard.hazardprotectorclient.view.MainActivity">
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/feedTable"
-        android:visibility="gone">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </TableLayout>
-
     <TextView
-        android:text="News Feed"
+        android:id="@+id/txtNewsFeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="23dp"
-        android:id="@+id/txtNewsFeed" />
+        android:text="News Feed"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/articlesListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

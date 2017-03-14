@@ -27,10 +27,10 @@ public class TableArticle implements Callable<ArrayList> {
     public ArrayList getData() {
         String result = null;
         try {
-            Document doc = Jsoup.connect("http://t-simkus.com/final_project/getArticles")
+            Document doc = Jsoup.connect("http://www.t-simkus.com/final_project/getArticles")
                     .followRedirects(true)
                     .ignoreContentType(true)
-                    .timeout(12000) // optional
+                    .timeout(20000)
                     .header("Accept-Language", "pt-BR,pt;q=0.8") // missing
                     .header("Accept-Encoding", "gzip,deflate,sdch") // missing
                     .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.107 Safari/537.36") // missing
@@ -41,7 +41,6 @@ public class TableArticle implements Callable<ArrayList> {
 
 
             String body = doc.body().text();
-            System.out.println("here"+body);
             result = body;
 
         }
@@ -54,16 +53,20 @@ public class TableArticle implements Callable<ArrayList> {
         return jsonToJava(this.articlesList);
     }
 
-    public void articlesToArray(String response) {
-        try {
+    public void articlesToArray(String response)
+    {
+        try
+        {
             JSONObject jsonObject = new JSONObject(response);
             JSONArray root = jsonObject.getJSONArray("data");
-            for(int i = 0; i < root.length();i++) {
+            for(int i = 0; i < root.length();i++)
+            {
                 JSONObject item = (JSONObject) root.get(i);
                 articlesList.add(item);
             }
         }
-        catch(JSONException e) {
+        catch(JSONException e)
+        {
             e.printStackTrace();
         }
     }

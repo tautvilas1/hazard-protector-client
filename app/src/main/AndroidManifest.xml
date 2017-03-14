@@ -30,32 +30,33 @@
         </receiver>
 
         <service
-            android:name=".controller.Search.FireBase.FirebaseInstance">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
+            android:enabled="true"
+            android:name="client.protector.hazard.hazardprotectorclient.GooglePlay.RegistrationService">
         </service>
 
-        <!-- <service -->
-        <!-- android:name="com.example.MyGcmListenerService" -->
-        <!-- android:exported="false" > -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="com.google.android.c2dm.intent.RECEIVE" /> -->
-        <!-- </intent-filter> -->
-        <!-- </service> -->
+         <service
+         android:name="client.protector.hazard.hazardprotectorclient.GooglePlay.MyGcmListenerService"
+         android:exported="false" >
+         <intent-filter>
+         <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+         </intent-filter>
+         </service>
 
 
-        <!-- <service -->
-        <!-- android:name="com.example.MyInstanceIDListenerService" -->
-        <!-- android:exported="false"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="com.google.android.gms.iid.InstanceID" /> -->
-        <!-- </intent-filter> -->
-        <!-- </service> -->
-        <!-- <service -->
-        <!-- android:name="gcm.play.android.samples.com.gcmquickstart.RegistrationIntentService" -->
-        <!-- android:exported="false"> -->
-        <!-- </service> -->
+        <service
+            android:name="client.protector.hazard.hazardprotectorclient.GooglePlay.TokenRefreshListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="client.protector.hazard.hazardprotectorclient.GooglePlay.NotificationsListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
         <activity android:name=".view.MainActivity"></activity>
         <activity android:name=".view.StartingActivity">
             <intent-filter>
