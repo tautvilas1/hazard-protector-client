@@ -17,8 +17,8 @@ articles using particular keywords
  */
 
 public class Finder implements Callable<ArrayList> {
-    String[] keywords;
-    ArrayList<Article> articlesList;
+    private String[] keywords;
+    private ArrayList<Article> articlesList;
     public ArrayList<Article> articlesListFiltered = new ArrayList<Article>();
 
 
@@ -28,12 +28,15 @@ public class Finder implements Callable<ArrayList> {
     }
 
     @Override
-    public ArrayList call() throws Exception {
-        for(Article article: articlesList) {
-            for(String keyword : keywords) {
-                if(article.toString().toLowerCase().contains(keyword.toLowerCase())) {
+    public ArrayList call() throws Exception
+    {
+        for(Article article: articlesList)
+        {
+            for(String keyword : keywords)
+            {
+                if(article.toString().toLowerCase().contains(keyword.toLowerCase()))
+                {
                     articlesListFiltered.add(article);
-                    System.out.println("Found article: "+article.getTitle());
                     break;
                 }
             }

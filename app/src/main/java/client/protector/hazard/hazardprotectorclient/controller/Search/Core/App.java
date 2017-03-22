@@ -23,6 +23,7 @@ public class App
 {
 
     public static User user;
+
     public static void setUser(User u)
     {
         user = u;

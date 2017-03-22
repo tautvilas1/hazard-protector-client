@@ -33,7 +33,7 @@ public class SaveUser implements Callable<DbResponse>
         Document doc = null;
         try
         {
-            doc = connect("http://www.t-simkus.com/final_project/saveUser.php")
+            doc = connect("http://www.odontologijos-erdve.lt/hazardprotector/saveUser.php")
                     .data("firstname", user.firstname)
                     .data("surname", user.surname)
                     .data("gcm_id", user.getGcm_id())

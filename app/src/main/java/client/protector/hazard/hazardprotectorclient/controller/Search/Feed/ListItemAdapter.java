@@ -1,6 +1,7 @@
 package client.protector.hazard.hazardprotectorclient.controller.Search.Feed;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import client.protector.hazard.hazardprotectorclient.R;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Image.LoadImage;
 import client.protector.hazard.hazardprotectorclient.model.Articles.Article;
+import client.protector.hazard.hazardprotectorclient.view.ArticleActivity;
 
 /**
  * Created by Tautvilas on 12/03/2017.
@@ -57,13 +59,13 @@ public class ListItemAdapter extends BaseAdapter
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent)
-    {
+        {
         Holder holder = new Holder();
         View rowView;
         rowView = inflater.inflate(R.layout.article_list_item, null);
 
-        holder.image =(ImageView) rowView.findViewById(R.id.image);
-        holder.title =(TextView) rowView.findViewById(R.id.title);
+        holder.image = (ImageView) rowView.findViewById(R.id.image);
+        holder.title = (TextView) rowView.findViewById(R.id.title);
 
         holder.title.setText(articlesList.get(position).getTitle());
         if(articlesList.get(position).getThumbnail() != "")
@@ -75,13 +77,24 @@ public class ListItemAdapter extends BaseAdapter
         {
             holder.image.setImageResource(R.drawable.no_image);
         }
+        holder.image.setOnClickListener(new View.OnClickListener()
+        {
+                @Override
+                public void onClick(View v)
+                {
+                    Intent intent = new Intent(context, ArticleActivity.class);
+                    intent.putExtra("article",articlesList.get(position));
+                    context.startActivity(intent);
+                }
+        });
         rowView.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                // TODO Auto-generated method stub
-                Toast.makeText(context, "You Clicked "+articlesList.get(position).getTitle(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context, ArticleActivity.class);
+                intent.putExtra("article",articlesList.get(position));
+                context.startActivity(intent);
             }
         });
         return rowView;

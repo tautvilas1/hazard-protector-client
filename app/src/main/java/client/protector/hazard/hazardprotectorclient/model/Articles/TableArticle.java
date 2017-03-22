@@ -2,6 +2,7 @@ package client.protector.hazard.hazardprotectorclient.model.Articles;
 
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,26 +17,23 @@ import java.util.concurrent.Callable;
 
 public class TableArticle implements Callable<ArrayList> {
 
-    Context context;
+    private Context context;
 
-    ArrayList<JSONObject> articlesList = new ArrayList<JSONObject>();
+    private ArrayList<JSONObject> articlesList = new ArrayList<JSONObject>();
 
     public TableArticle(Context context) {
-        context = context;
+        this.context = context;
     }
 
     public ArrayList getData() {
         String result = null;
-        try {
-            Document doc = Jsoup.connect("http://www.t-simkus.com/final_project/getArticles")
+        try
+        {
+            Document doc = Jsoup.connect("http://www.odontologijos-erdve.lt/hazardprotector/getArticles.php")
                     .followRedirects(true)
                     .ignoreContentType(true)
-                    .timeout(20000)
-                    .header("Accept-Language", "pt-BR,pt;q=0.8") // missing
-                    .header("Accept-Encoding", "gzip,deflate,sdch") // missing
-                    .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.107 Safari/537.36") // missing
-                    .referrer("http://www.google.com") // optional
-                    .maxBodySize(0)
+                    .timeout(60000)
+                    .userAgent("Mozilla")
                     .execute()
                     .parse();
 
@@ -44,7 +42,8 @@ public class TableArticle implements Callable<ArrayList> {
             result = body;
 
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
 
@@ -58,12 +57,16 @@ public class TableArticle implements Callable<ArrayList> {
         try
         {
             JSONObject jsonObject = new JSONObject(response);
-            JSONArray root = jsonObject.getJSONArray("data");
-            for(int i = 0; i < root.length();i++)
+            if(jsonObject != null)
             {
-                JSONObject item = (JSONObject) root.get(i);
-                articlesList.add(item);
+                JSONArray root = jsonObject.getJSONArray("data");
+                for(int i = 0; i < root.length();i++)
+                {
+                    JSONObject item = (JSONObject) root.get(i);
+                    articlesList.add(item);
+                }
             }
+
         }
         catch(JSONException e)
         {
@@ -76,12 +79,14 @@ public class TableArticle implements Callable<ArrayList> {
         for(int i = 0; i < articles.size();i++) {
             Article article = new Article();
             try {
+                article.setId(Integer.parseInt(articles.get(i).getString("id")));
                 article.setTitle(articles.get(i).getString("title"));
                 article.setCredit(articles.get(i).getString("credit"));
                 article.setPublishDate(articles.get(i).getString("publishDate"));
                 article.setThumbnail(articles.get(i).getString("thumbnail"));
                 article.setDescription(articles.get(i).getString("description"));
                 article.setLink(articles.get(i).getString("link"));
+                article.setFullDescription(articles.get(i).getString("fullDescription"));
                 String tags = articles.get(i).getString("tags");
                 ArrayList<String> tagsList = new ArrayList<>();
                 String[] tagsListTemp = tags.split(",");

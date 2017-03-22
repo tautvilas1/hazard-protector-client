@@ -4,60 +4,57 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="client.protector.hazard.hazardprotectorclient.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
     <permission
         android:name="client.protector.hazard.hazardprotectorclient.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        >
+        android:theme="@style/AppTheme">
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="client.protector.hazard.hazardprotectorclient" />
             </intent-filter>
         </receiver>
 
         <service
-            android:enabled="true"
-            android:name="client.protector.hazard.hazardprotectorclient.GooglePlay.RegistrationService">
-        </service>
-
-         <service
-         android:name="client.protector.hazard.hazardprotectorclient.GooglePlay.MyGcmListenerService"
-         android:exported="false" >
-         <intent-filter>
-         <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-         </intent-filter>
-         </service>
-
-
+            android:name=".GooglePlay.RegistrationService"
+            android:enabled="true" />
         <service
-            android:name="client.protector.hazard.hazardprotectorclient.GooglePlay.TokenRefreshListenerService"
+            android:name=".GooglePlay.MyGcmListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".GooglePlay.TokenRefreshListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
         <service
-            android:name="client.protector.hazard.hazardprotectorclient.GooglePlay.NotificationsListenerService"
-            android:exported="false" >
+            android:name=".GooglePlay.NotificationsListenerService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-        <activity android:name=".view.MainActivity"></activity>
+
         <activity android:name=".view.StartingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,7 +62,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.RegisterActivity"></activity>
+        <activity android:name=".view.MainActivity" />
+        <activity android:name=".view.RegisterActivity" />
+        <activity android:name=".view.ArticleActivity" />
+        <activity android:name=".view.SettingsActivity"></activity>
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -52,6 +54,7 @@ import java.util.concurrent.Future;
 
 import client.protector.hazard.hazardprotectorclient.GooglePlay.RegistrationService;
 import client.protector.hazard.hazardprotectorclient.R;
+import client.protector.hazard.hazardprotectorclient.controller.Search.Article.ArticleSort;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Feed.LoadFeed;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Image.LoadImage;
@@ -85,34 +88,24 @@ public class MainActivity extends AppCompatActivity implements
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startRegistrationService();
         user = App.user;
-        Log.d("log",user.getFirstname() + " " + App.user.getFirstname());
-        getSupportActionBar().setTitle("Hey, " + user.getFirstname());
-        Log.d("log" , "Static : "+user.getGcm_id());
-        try
-        {
-            loadFeed();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        getSupportActionBar().setTitle("Welcome, " + user.getFirstname());
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
 
-
+        loadFeed();
         locationStatus.addObserver(this);
         buildLocationManager();
         buildLocationServices();
         promptLocationServices();
-//        getLocation();
     }
 
     public void startRegistrationService()
@@ -283,64 +276,42 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    public void loadFeed() throws IOException
+    public void loadFeed()
     {
         getArticles();
+        ArticleSort articleSort = new ArticleSort(articlesList);
+        articleSort.sortByDate();
+        ListView articlesListView = (ListView) findViewById(R.id.articlesListView);
         if(articlesList.size() > 0)
         {
-            ListView articlesListView = (ListView) findViewById(R.id.articlesListView);
             LoadFeed loadFeed = new LoadFeed(this,articlesList,articlesListView);
             loadFeed.populateList();
         }
-
-//        String keywords[] = {"war","terror" ,"flood","hazard","earthquake","disaster"};
-//
-//        ExecutorService es = Executors.newSingleThreadExecutor();
-//        Future f = es.submit(new Finder(keywords,articlesList));
-//
-//        ArrayList<Article> articlesListFiltered = new ArrayList<Article>();
-//
-//        try
-//        {
-//            articlesListFiltered = (ArrayList<Article>) f.get();
-//        }
-//        catch (InterruptedException e)
-//        {
-//            e.printStackTrace();
-//        }
-//        catch (ExecutionException e)
-//        {
-//            e.printStackTrace();
-//        }
-//        RelativeLayout container = (RelativeLayout) findViewById(R.id.activity_main);
-//
-//
-//        for(int i = 0; i < articlesListFiltered.size();i++)
-//        {
-//            Article article = articlesListFiltered.get(i);
-//            TextView txtLink = new TextView(this);
-//            txtLink.setClickable(true);
-//            txtLink.setMovementMethod(LinkMovementMethod.getInstance());
-//            String text = "<a href='"+article.getLink()+"'>"+article.getDescription()+"</a>";
-//            txtLink.setText(Html.fromHtml(text));
-//            container.addView(txtLink);
-//        }
+        else
+        {
+            TextView txtNewsFeed = (TextView) findViewById(R.id.txtNewsFeed);
+            articlesListView.setVisibility(View.INVISIBLE);
+            txtNewsFeed.setVisibility(View.VISIBLE);
+            txtNewsFeed.setTextColor(Color.RED);
+            txtNewsFeed.setText("No articles could be loaded");
+        }
     }
 
 
-    public void getArticles() throws IOException
+    public void getArticles()
     {
-//        TextView content = (TextView) findViewById(R.id.lblContent);
-//        content.setMovementMethod(new ScrollingMovementMethod());
         ExecutorService es = Executors.newSingleThreadExecutor();
         Future f = es.submit(new TableArticle(this));
-        try {
+        try
+        {
             articlesList = (ArrayList<Article>) f.get();
         }
-        catch (InterruptedException e) {
+        catch (InterruptedException e)
+        {
             e.printStackTrace();
         }
-        catch (ExecutionException e) {
+        catch (ExecutionException e)
+        {
             e.printStackTrace();
         }
     }

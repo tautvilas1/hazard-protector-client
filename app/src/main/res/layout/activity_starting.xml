@@ -10,22 +10,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="client.protector.hazard.hazardprotectorclient.view.StartingActivity">
 
-    <Button
-        android:text="Register GCM"
+    <TextView
+        android:id="@+id/idMsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/btnConnect"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/btnRegisterGCM"
-        android:onClick="registerGCM" />
+        android:layout_marginBottom="16dp"
+        android:text="Connection lost."
+        android:textAlignment="center" />
 
     <Button
-        android:text="Go to main activity"
+        android:id="@+id/btnConnect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/btnGoMain" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:onClick="clickRetry"
+        android:text="Retry" />
 </RelativeLayout>

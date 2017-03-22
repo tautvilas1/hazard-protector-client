@@ -1,19 +1,22 @@
 package client.protector.hazard.hazardprotectorclient.model.Articles;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
 /**
  * Created by Tautvilas on 16/10/2016.
  */
-public class Article
+public class Article implements Serializable
 {
+    private int id;
     private String publishDate = "";
     private String title = "";
     private String description = "";
     private String link = "";
     private String thumbnail = "";
     private String credit = "";
+    private String fullDescription = "";
     private ArrayList<String> tags = new ArrayList<String>();
     private int ranking = 0;
 
@@ -111,7 +114,8 @@ public class Article
         this.link = link;
     }
 
-    public String toString() {
+    public String toString()
+    {
         return "Title: "+ title + "\n"+
                 "Link: "+ link + "\n"+
                 "Description: " +description + "\n"+
@@ -121,21 +125,21 @@ public class Article
                 "Tags: " + getTagsString();
     }
 
-    public String validate(Article articleParam, ArrayList<Article> articlesList) {
-        String result = "Valid";
-        if(articlesList.size() > 0) {
-            for(Article article : articlesList) {
-                if(article.getTitle().equals(articleParam.getTitle())) {
-                    result = "Invalid";
-                    break;
-                }
-            }
-        }
-        else {
-            result = "No Articles In The List";
-        }
-        return result;
+    public int getId()
+    {
+        return id;
     }
 
+    public void setId(int id)
+    {
+        this.id = id;
+    }
 
+    public String getFullDescription() {
+        return fullDescription;
+    }
+
+    public void setFullDescription(String fullDescription) {
+        this.fullDescription = fullDescription;
+    }
 }

@@ -44,9 +44,15 @@ public class ColourListener implements View.OnClickListener
         switch (colourSelected)
         {
             case "red" : user.setColourCode(1);
+                break;
             case "orange" : user.setColourCode(2);
+                break;
             case "blue" : user.setColourCode(3);
+                break;
             case "green" : user.setColourCode(4);
+                break;
+            default: user.setColourCode(0);
+                break;
         }
 
         btnColour.setBackgroundColor(Color.RED);

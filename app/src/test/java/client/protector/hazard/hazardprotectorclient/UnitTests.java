@@ -23,52 +23,52 @@ import org.mockito.mock.*;
 /**
  * Created by Tautvilas on 27/02/2017.
  */
-@RunWith(MockitoJUnitRunner.class);
-public class UnitTests
-{
-    @Mock
-    ExecutorService es = Executors.newSingleThreadExecutor();
-
-    @Mock
-    Future f = es.submit(new RegisterUser("Tester","Serner","Test_GCM",0,0));
-
-    @Mock
-    DbResponse response = null;
-
-    @Test
-    public void Register_User_Text()
-    {
-
-        try
-        {
-            response = (DbResponse) f.get();
-        }
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-        catch (ExecutionException e)
-        {
-            e.printStackTrace();
-        }
-
-//        when(response.getStatus())
-//                .thenReturn(FAKE_STRING);
-//        ClassUnderTest myObjectUnderTest = new ClassUnderTest(mMockContext);
+//@RunWith(MockitoJUnitRunner.class);
+//public class UnitTests
+//{
+//    @Mock
+//    ExecutorService es = Executors.newSingleThreadExecutor();
 //
-//        // ...when the string is returned from the object under test...
-//        String result = myObjectUnderTest.getHelloWorldString();
-
-        // ...then the result should be the expected one.
-        assertThat(response.getStatus(), is(200));
-
-        if(response != null)
-        {
-            assertEquals("User was not saved",200,response.getStatus());
-        }
-        else
-        {
-            System.out.println("Response is null");
-        }
-    }
-}
+//    @Mock
+//    Future f = es.submit(new RegisterUser("Tester","Serner","Test_GCM",0,0));
+//
+//    @Mock
+//    DbResponse response = null;
+//
+//    @Test
+//    public void Register_User_Text()
+//    {
+//
+//        try
+//        {
+//            response = (DbResponse) f.get();
+//        }
+//        catch (InterruptedException e)
+//        {
+//            e.printStackTrace();
+//        }
+//        catch (ExecutionException e)
+//        {
+//            e.printStackTrace();
+//        }
+//
+////        when(response.getStatus())
+////                .thenReturn(FAKE_STRING);
+////        ClassUnderTest myObjectUnderTest = new ClassUnderTest(mMockContext);
+////
+////        // ...when the string is returned from the object under test...
+////        String result = myObjectUnderTest.getHelloWorldString();
+//
+//        // ...then the result should be the expected one.
+//        assertThat(response.getStatus(), is(200));
+//
+//        if(response != null)
+//        {
+//            assertEquals("User was not saved",200,response.getStatus());
+//        }
+//        else
+//        {
+//            System.out.println("Response is null");
+//        }
+//    }
+//}

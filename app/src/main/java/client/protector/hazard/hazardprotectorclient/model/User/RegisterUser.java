@@ -1,8 +1,12 @@
 package client.protector.hazard.hazardprotectorclient.model.User;
 
+import android.util.Log;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 
+import java.io.IOException;
 import java.util.concurrent.Callable;
 
 import client.protector.hazard.hazardprotectorclient.model.Common.DbResponse;
@@ -17,7 +21,6 @@ public class RegisterUser implements Callable<DbResponse>
 {
     private String firstname, surname, gcmId, terror, flood, war, earthquake, registrationId;
     private int radius, colourCode;
-    private JSONObject preferences;
 
     public RegisterUser(String firstname, String surname, String gcmId, String terror, String flood,
        String war, String earthquake, int radius, int colourCode, String registrationId)
@@ -34,25 +37,43 @@ public class RegisterUser implements Callable<DbResponse>
         this.registrationId = registrationId;
     }
     @Override
-    public DbResponse call() throws Exception {
-        Document doc = connect("http://www.t-simkus.com/final_project/registerUser.php")
-                .data("firstname", firstname)
-                .data("surname", surname)
-                .data("gcmId", gcmId)
-                .data("terror", terror)
-                .data("flood", flood)
-                .data("war", war)
-                .data("earthquake", earthquake)
-                .data("radius", String.valueOf(radius))
-                .data("colourCode", String.valueOf(colourCode))
-                .data("registrationId", String.valueOf(registrationId))
-                .userAgent("Mozilla")
-                .post();
-
-        JSONObject response = new JSONObject(doc.body().text());
+    public DbResponse call() {
+        Document doc = null;
         DbResponse dbResponse = new DbResponse();
-        dbResponse.setMsg(response.getString("msg"));
-        dbResponse.setStatus(response.getInt("status"));
+        dbResponse.setStatus(400);
+        dbResponse.setMsg("JSON failed");
+        try {
+            doc = connect("http://www.odontologijos-erdve.lt/hazardprotector/registerUser.php")
+                    .data("firstname", firstname)
+                    .data("surname", surname)
+                    .data("gcmId", gcmId)
+                    .data("terror", terror)
+                    .data("flood", flood)
+                    .data("war", war)
+                    .data("earthquake", earthquake)
+                    .data("radius", String.valueOf(radius))
+                    .data("colourCode", String.valueOf(colourCode))
+                    .data("registrationId", String.valueOf(registrationId))
+                    .userAgent("Mozilla")
+                    .timeout(10000)
+                    .post();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        try
+        {
+            JSONObject response = new JSONObject(doc.body().text());
+            dbResponse.setMsg(response.getString("msg"));
+            dbResponse.setStatus(response.getInt("status"));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
         return dbResponse;
     }
 }

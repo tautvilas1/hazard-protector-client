@@ -40,7 +40,7 @@ public class GetUser implements Callable<User>
         try
         {
 
-            Document doc = connect("http://www.t-simkus.com/final_project/getUser")
+            Document doc = connect("http://www.odontologijos-erdve.lt/hazardprotector/getUser.php")
                     .data("gcmId", gcmId)
                     .userAgent("Mozilla")
                     .timeout(20000)

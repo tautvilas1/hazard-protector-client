@@ -1,6 +1,7 @@
 package client.protector.hazard.hazardprotectorclient.view;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;

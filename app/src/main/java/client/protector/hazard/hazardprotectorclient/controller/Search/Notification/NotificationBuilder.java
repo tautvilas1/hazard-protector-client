@@ -20,9 +20,9 @@ public class NotificationBuilder
         this.context = context;
         notificationBuilder =
                 new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.cast_ic_notification_small_icon)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!");
+                        .setSmallIcon(R.drawable.logo)
+                        .setContentTitle("Hazard Protector")
+                        .setContentText("A hazard in your area was detected");
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
     }

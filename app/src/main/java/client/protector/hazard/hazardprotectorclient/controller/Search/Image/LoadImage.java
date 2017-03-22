@@ -52,15 +52,13 @@ public class LoadImage extends AsyncTask<Void, Void, Bitmap> {
     protected void onPostExecute(Bitmap result)
     {
         super.onPostExecute(result);
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        imageView.setAdjustViewBounds(true);
         imageView.setImageBitmap(result);
         if(hasImage(imageView) == false)
         {
             imageView.setImageResource(R.drawable.no_image);
         }
-//        else
-//        {
-////            imageView.setlayo
-//        }
     }
 
     private boolean hasImage(@NonNull ImageView view)
