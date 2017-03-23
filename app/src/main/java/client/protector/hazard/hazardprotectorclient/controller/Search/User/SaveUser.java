@@ -20,7 +20,7 @@ import static org.jsoup.Jsoup.connect;
 
 public class SaveUser implements Callable<DbResponse>
 {
-    User user;
+    private User user;
     public SaveUser(User user)
     {
         this.user = user;
@@ -43,8 +43,9 @@ public class SaveUser implements Callable<DbResponse>
                     .data("flood", user.getFlood())
                     .data("war", user.getWar())
                     .data("earthquake", user.getEarthquake())
+                    .data("political", user.getPolitical())
+                    .data("criminal", user.getCriminal())
                     .data("colourCode", String.valueOf(user.getColourCode()))
-                    .data("radius", String.valueOf(user.getRadius()))
                     .data("registrationId", String.valueOf(user.getRegistrationId()))
                     .userAgent("Mozilla")
                     .timeout(10000)

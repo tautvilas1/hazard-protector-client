@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import client.protector.hazard.hazardprotectorclient.model.User.User;
+import client.protector.hazard.hazardprotectorclient.view.FeedActivity;
 import client.protector.hazard.hazardprotectorclient.view.MainActivity;
 
 /**
@@ -16,7 +17,7 @@ public class GoToMain
 {
     public GoToMain(Context context)
     {
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, FeedActivity.class);
         context.startActivity(intent);
     }
 }

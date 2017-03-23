@@ -79,8 +79,9 @@ public class GetUser implements Callable<User>
                 user.setFlood(jsonObject.getString("flood"));
                 user.setWar(jsonObject.getString("war"));
                 user.setEarthquake(jsonObject.getString("earthquake"));
+                user.setPolitical(jsonObject.getString("political"));
+                user.setCriminal(jsonObject.getString("criminal"));
                 user.setColourCode(Integer.parseInt(jsonObject.getString("colourCode")));
-                user.setRadius(Integer.parseInt(jsonObject.getString("radius")));
                 user.setRegistrationId(jsonObject.getString("registrationId"));
             }
 

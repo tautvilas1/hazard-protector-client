@@ -19,11 +19,11 @@ import static org.jsoup.Jsoup.connect;
 
 public class RegisterUser implements Callable<DbResponse>
 {
-    private String firstname, surname, gcmId, terror, flood, war, earthquake, registrationId;
-    private int radius, colourCode;
+    private String firstname, surname, gcmId, terror, flood, war, earthquake, political, criminal, registrationId;
+    private int colourCode;
 
     public RegisterUser(String firstname, String surname, String gcmId, String terror, String flood,
-       String war, String earthquake, int radius, int colourCode, String registrationId)
+       String war, String earthquake, String political, String criminal ,int colourCode, String registrationId)
     {
         this.firstname = firstname;
         this.surname = surname;
@@ -32,7 +32,8 @@ public class RegisterUser implements Callable<DbResponse>
         this.flood = flood;
         this.war = war;
         this.earthquake = earthquake;
-        this.radius = radius;
+        this.political = political;
+        this.criminal = criminal;
         this.colourCode = colourCode;
         this.registrationId = registrationId;
     }
@@ -51,7 +52,8 @@ public class RegisterUser implements Callable<DbResponse>
                     .data("flood", flood)
                     .data("war", war)
                     .data("earthquake", earthquake)
-                    .data("radius", String.valueOf(radius))
+                    .data("political", political)
+                    .data("criminal", criminal)
                     .data("colourCode", String.valueOf(colourCode))
                     .data("registrationId", String.valueOf(registrationId))
                     .userAgent("Mozilla")

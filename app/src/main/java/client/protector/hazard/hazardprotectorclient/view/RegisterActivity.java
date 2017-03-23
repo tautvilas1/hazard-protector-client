@@ -38,7 +38,6 @@ public class RegisterActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        getSupportActionBar().setTitle("Please enter a few details");
         user = new User();
         gcmId = InstanceID.getInstance(this).getId();
         btnRegister = (Button) findViewById(R.id.btnRegister);
@@ -61,17 +60,18 @@ public class RegisterActivity extends AppCompatActivity
         CheckBox ckWar = (CheckBox) findViewById(R.id.ckWar);
         CheckBox ckFlood = (CheckBox) findViewById(R.id.ckFlood);
         CheckBox ckEarthquake = (CheckBox) findViewById(R.id.ckEarthquake);
-
-        Spinner selRadius = (Spinner) findViewById(R.id.selRadius);
-        int radius = extractRadius(selRadius.getSelectedItem().toString());
+        CheckBox ckPolitical = (CheckBox) findViewById(R.id.ckPolitical);
+        CheckBox ckCriminal = (CheckBox) findViewById(R.id.ckCriminal);
 
         String terror = String.valueOf(ckTerror.isChecked());
         String flood = String.valueOf(ckFlood.isChecked());
         String war = String.valueOf(ckWar.isChecked());
         String earthquake = String.valueOf(ckEarthquake.isChecked());
+        String political = String.valueOf(ckPolitical.isChecked());
+        String criminal = String.valueOf(ckCriminal.isChecked());
 
         ExecutorService es = Executors.newSingleThreadExecutor();
-        Future f = es.submit(new RegisterUser(firstname,surname,gcmId,terror,flood,war,earthquake,radius,user.getColourCode(),null));
+        Future f = es.submit(new RegisterUser(firstname,surname,gcmId,terror,flood,war,earthquake,political,criminal,user.getColourCode(),null));
         try
         {
             btnRegister.setEnabled(false);
@@ -85,7 +85,8 @@ public class RegisterActivity extends AppCompatActivity
                 user.setFlood(flood);
                 user.setWar(war);
                 user.setEarthquake(earthquake);
-                user.setRadius(radius);
+                user.setPolitical(political);
+                user.setCriminal(criminal);
                 user.save();
                 App.setUser(user);
                 GoToMain goToMain = new GoToMain(this);

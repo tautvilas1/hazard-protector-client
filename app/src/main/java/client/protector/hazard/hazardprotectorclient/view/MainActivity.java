@@ -44,6 +44,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
@@ -281,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements
         getArticles();
         ArticleSort articleSort = new ArticleSort(articlesList);
         articleSort.sortByDate();
+        Collections.reverse(articlesList);
         ListView articlesListView = (ListView) findViewById(R.id.articlesListView);
         if(articlesList.size() > 0)
         {

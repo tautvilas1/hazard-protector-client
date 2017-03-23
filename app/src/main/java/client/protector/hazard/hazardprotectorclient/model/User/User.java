@@ -1,7 +1,5 @@
 package client.protector.hazard.hazardprotectorclient.model.User;
 
-import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -25,9 +23,10 @@ public class User implements Serializable
     public String flood = "true";
     public String war = "true";
     public String earthquake = "true";
+    public String political = "true";
+    public String criminal = "true";
 
     public String registrationId = "";
-    public int radius = 1000;
     public int colourCode = 0;
     double latitude = 0, longitude = 0;
 
@@ -35,6 +34,23 @@ public class User implements Serializable
     {
 
     }
+
+    public String getPolitical() {
+        return political;
+    }
+
+    public void setPolitical(String political) {
+        this.political = political;
+    }
+
+    public String getCriminal() {
+        return criminal;
+    }
+
+    public void setCriminal(String criminal) {
+        this.criminal = criminal;
+    }
+
     public String getRegistrationId() {
         return registrationId;
     }
@@ -123,15 +139,6 @@ public class User implements Serializable
         this.longitude = longitude;
     }
 
-
-    public int getRadius() {
-        return radius;
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -143,7 +150,6 @@ public class User implements Serializable
                 ", war='" + war + '\'' +
                 ", earthquake='" + earthquake + '\'' +
                 ", registrationId='" + registrationId + '\'' +
-                ", radius=" + radius +
                 ", colourCode=" + colourCode +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +

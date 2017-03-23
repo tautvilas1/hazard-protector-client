@@ -38,6 +38,9 @@ public class ArticleActivity extends AppCompatActivity {
 
     private void setupActionBar()
     {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarMain);
+        setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
