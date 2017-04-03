@@ -11,6 +11,18 @@ public class Article implements Serializable
 {
     private int id;
     private String publishDate = "";
+
+    public String getDateAdded()
+    {
+        return dateAdded;
+    }
+
+    public void setDateAdded(String dateAdded)
+    {
+        this.dateAdded = dateAdded;
+    }
+
+    private String dateAdded = "";
     private String title = "";
     private String description = "";
     private String link = "";

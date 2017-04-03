@@ -5,10 +5,12 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,7 +22,9 @@ import java.util.concurrent.Future;
 
 import client.protector.hazard.hazardprotectorclient.R;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Article.ArticleSort;
+import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Feed.LoadFeed;
+import client.protector.hazard.hazardprotectorclient.controller.Search.Listeners.NewsFeedScrollListener;
 import client.protector.hazard.hazardprotectorclient.model.Articles.Article;
 import client.protector.hazard.hazardprotectorclient.model.Articles.TableArticle;
 
@@ -38,7 +42,7 @@ public class NewsFeed extends Fragment
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private ArrayList<Article> articlesList = new ArrayList<Article>();
+    private View view;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -81,10 +85,19 @@ public class NewsFeed extends Fragment
     }
 
     @Override
+    public void onResume()
+    {
+        super.onResume();
+//        getArticles();
+//        loadFeed(view);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_news_feed, container, false);
+        view = inflater.inflate(R.layout.fragment_news_feed, container, false);
+        getArticles();
         loadFeed(view);
         return view;
     }
@@ -92,10 +105,10 @@ public class NewsFeed extends Fragment
     public void getArticles()
     {
         ExecutorService es = Executors.newSingleThreadExecutor();
-        Future f = es.submit(new TableArticle(getActivity()));
+        Future f = es.submit(new TableArticle(getActivity(),30,0));
         try
         {
-            articlesList = (ArrayList<Article>) f.get();
+            App.articlesList = (ArrayList<Article>) f.get();
         }
         catch (InterruptedException e)
         {
@@ -109,15 +122,18 @@ public class NewsFeed extends Fragment
 
     public void loadFeed(View view)
     {
-        getArticles();
-        ArticleSort articleSort = new ArticleSort(articlesList);
-        articleSort.sortByDate();
-        Collections.reverse(articlesList);
+
         ListView articlesListView = (ListView) view.findViewById(R.id.articlesListView);
-        if(articlesList.size() > 0)
+        ProgressBar loading = (ProgressBar) view.findViewById(R.id.newsFeedLoading);
+        if(App.articlesList.size() > 0)
         {
-            LoadFeed loadFeed = new LoadFeed(getActivity(),articlesList,articlesListView);
+            ArticleSort articleSort = new ArticleSort();
+            App.articlesList = articleSort.sortByDate(App.articlesList);
+            Collections.reverse(App.articlesList);
+            ArrayList<Article> refinedList = articleSort.sortByPreferences(App.articlesList);
+            LoadFeed loadFeed = new LoadFeed(getActivity(),refinedList,articlesListView);
             loadFeed.populateList();
+            articlesListView.setOnScrollListener(new NewsFeedScrollListener(getActivity(),articlesListView,loading));
         }
         else
         {
@@ -126,13 +142,6 @@ public class NewsFeed extends Fragment
             txtNewsFeed.setVisibility(View.VISIBLE);
             txtNewsFeed.setTextColor(Color.RED);
             txtNewsFeed.setText("No articles could be loaded");
-        }
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
         }
     }
 

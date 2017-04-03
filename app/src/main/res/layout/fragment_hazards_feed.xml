@@ -4,10 +4,24 @@
     android:layout_height="match_parent"
     tools:context="client.protector.hazard.hazardprotectorclient.view.HazardsFeed">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/lblHazards"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:text="Hazardous news"
+        android:textAlignment="center"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/articlesListView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hazards feed" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="20dp"
+        android:visibility="visible" />
 
 </FrameLayout>

@@ -30,12 +30,18 @@ public class SaveUser implements Callable<DbResponse>
     public DbResponse call()
     {
 
+        DbResponse dbResponse = new DbResponse();
+        JSONObject response = null;
         Document doc = null;
         try
         {
+            String hazardArticles = user.getHazardArticlesList().toString();
+            hazardArticles = hazardArticles.replaceAll("\\]","");
+            hazardArticles = hazardArticles.replaceAll("\\[","");
+
             doc = connect("http://www.odontologijos-erdve.lt/hazardprotector/saveUser.php")
-                    .data("firstname", user.firstname)
-                    .data("surname", user.surname)
+                    .data("firstname", user.getFirstname())
+                    .data("surname", user.getSurname())
                     .data("gcm_id", user.getGcm_id())
                     .data("latitude", Double.toString(user.getLatitude()))
                     .data("longitude", Double.toString(user.getLongitude()))
@@ -46,28 +52,27 @@ public class SaveUser implements Callable<DbResponse>
                     .data("political", user.getPolitical())
                     .data("criminal", user.getCriminal())
                     .data("colourCode", String.valueOf(user.getColourCode()))
+                    .data("hazardArticles", hazardArticles)
                     .data("registrationId", String.valueOf(user.getRegistrationId()))
                     .userAgent("Mozilla")
                     .timeout(10000)
                     .post();
+
+            response = new JSONObject(doc.body().text());
+            System.out.println("response save: "+dbResponse.toString());
+            dbResponse.setMsg(response.getString("msg"));
+            dbResponse.setStatus(response.getInt("status"));
         }
         catch (IOException e)
         {
             Log.d("log","Save user exception");
             e.printStackTrace();
         }
-        DbResponse dbResponse = new DbResponse();
-        JSONObject response = null;
-        try
-        {
-            response = new JSONObject(doc.body().text());
-            dbResponse.setMsg(response.getString("msg"));
-            dbResponse.setStatus(response.getInt("status"));
-        }
         catch (JSONException e)
         {
             e.printStackTrace();
         }
+
         return dbResponse;
     }
 }

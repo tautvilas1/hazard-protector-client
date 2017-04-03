@@ -1,6 +1,9 @@
 package client.protector.hazard.hazardprotectorclient.model.User;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,7 +16,7 @@ import client.protector.hazard.hazardprotectorclient.model.Common.DbResponse;
  * Created by Tautvilas on 11/02/2017.
  */
 
-public class User implements Serializable
+public class User extends Observable implements Serializable
 {
 
     public String firstname = "";
@@ -25,6 +28,8 @@ public class User implements Serializable
     public String earthquake = "true";
     public String political = "true";
     public String criminal = "true";
+    public String hazardArticles = "";
+    public ArrayList<String> hazardArticlesList = new ArrayList<String>();
 
     public String registrationId = "";
     public int colourCode = 0;
@@ -32,8 +37,32 @@ public class User implements Serializable
 
     public User()
     {
-
     }
+
+    public void setHazardArticlesList(ArrayList<String> hazardArticlesList)
+    {
+        this.hazardArticlesList = hazardArticlesList;
+        setChanged();
+        notifyObservers();
+    }
+
+    public void setHazardArticles(String hazardArticles)
+    {
+        if(!hazardArticles.equals("0"))
+        {
+            String[] articles = hazardArticles.split(",");
+            for(String article: articles)
+            {
+                hazardArticlesList.add(article.trim());
+            }
+        }
+    }
+
+    public ArrayList<String> getHazardArticlesList()
+    {
+        return hazardArticlesList;
+    }
+
 
     public String getPolitical() {
         return political;
@@ -139,8 +168,45 @@ public class User implements Serializable
         this.longitude = longitude;
     }
 
+    public ArrayList<String> getPreferences()
+    {
+        ArrayList<String> preferences = new ArrayList<String>();
+        if(this.getTerror().equals("true"))
+        {
+            preferences.add("terror");
+            preferences.add("bomb");
+            preferences.add("explosion");
+        }
+        if(this.getFlood().equals("true"))
+        {
+            preferences.add("flood");
+        }
+        if(this.getWar().equals("true"))
+        {
+            preferences.add("war");
+            preferences.add("military");
+        }
+        if(this.getEarthquake().equals("true"))
+        {
+            preferences.add("earthquake");
+        }
+        if(this.getPolitical().equals("true"))
+        {
+            preferences.add("political");
+            preferences.add("government");
+        }
+        if(this.getCriminal().equals("true"))
+        {
+            preferences.add("criminal");
+            preferences.add("jail");
+            preferences.add("police");
+        }
+        return preferences;
+    }
+
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "User{" +
                 "firstname='" + firstname + '\'' +
                 ", surname='" + surname + '\'' +
@@ -149,6 +215,9 @@ public class User implements Serializable
                 ", flood='" + flood + '\'' +
                 ", war='" + war + '\'' +
                 ", earthquake='" + earthquake + '\'' +
+                ", political='" + political + '\'' +
+                ", criminal='" + criminal + '\'' +
+                ", hazardArticles='" + hazardArticles + '\'' +
                 ", registrationId='" + registrationId + '\'' +
                 ", colourCode=" + colourCode +
                 ", latitude=" + latitude +
@@ -186,5 +255,6 @@ public class User implements Serializable
         }
         return result;
     }
+
 
 }

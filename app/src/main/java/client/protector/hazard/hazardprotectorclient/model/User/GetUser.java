@@ -3,10 +3,8 @@ package client.protector.hazard.hazardprotectorclient.model.User;
 import android.content.Context;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
@@ -17,7 +15,6 @@ import java.util.concurrent.Callable;
  */
 
 
-import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
 import client.protector.hazard.hazardprotectorclient.model.Common.DbResponse;
 
 import static org.jsoup.Jsoup.connect;
@@ -82,6 +79,7 @@ public class GetUser implements Callable<User>
                 user.setPolitical(jsonObject.getString("political"));
                 user.setCriminal(jsonObject.getString("criminal"));
                 user.setColourCode(Integer.parseInt(jsonObject.getString("colourCode")));
+                user.setHazardArticles(jsonObject.getString("hazardArticles"));
                 user.setRegistrationId(jsonObject.getString("registrationId"));
             }
 

@@ -1,9 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="client.protector.hazard.hazardprotectorclient.view.SettingsActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <EditText
+            android:id="@+id/txtEditFirstname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Please enter your firstname"
+            android:inputType="textPersonName"
+            tools:text="Enter your firstname" />
+
+        <EditText
+            android:id="@+id/txtEditSurname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Please enter your surname"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/txtPreferences"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Include in my news feed"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+
+        <GridLayout
+            android:id="@+id/gdPreferences"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:id="@+id/ckEditFlood"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_row="0"
+                android:checked="true"
+                android:text="Flooding news" />
+
+            <CheckBox
+                android:id="@+id/ckEditWar"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_row="1"
+                android:checked="true"
+                android:text="War news" />
+
+            <CheckBox
+                android:id="@+id/ckEditEarthquake"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_row="1"
+                android:checked="true"
+                android:text="Earthquake news" />
+
+            <CheckBox
+                android:id="@+id/ckEditTerror"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:checked="true"
+                android:text="Terror news" />
+
+            <CheckBox
+                android:id="@+id/ckEditPolitical"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_row="2"
+                android:checked="true"
+                android:text="Political News" />
+
+            <CheckBox
+                android:id="@+id/ckEditCriminal"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_row="2"
+                android:checked="true"
+                android:text="Criminal News" />
+        </GridLayout>
+
+        <TextView
+            android:id="@+id/txtDesign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Select your design colour"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+
+        <GridLayout
+            android:id="@+id/gdColours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/editRed"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/circle_red" />
+
+            <ImageButton
+                android:id="@+id/editOrange"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/circle_orange" />
+
+            <ImageButton
+                android:id="@+id/editBlue"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:layout_row="0"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/circle_blue" />
+
+            <ImageButton
+                android:id="@+id/editGreen"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:layout_column="3"
+                android:layout_row="0"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/circle_green" />
+        </GridLayout>
+
+        <Button
+            android:id="@+id/btnEditSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:onClick="saveDetails"
+            android:text="Save" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarSettings"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    </android.support.design.widget.AppBarLayout>
+
+</RelativeLayout>

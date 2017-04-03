@@ -24,6 +24,7 @@ import client.protector.hazard.hazardprotectorclient.R;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Common.GoToMain;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Listeners.ColourListener;
+import client.protector.hazard.hazardprotectorclient.controller.Search.User.DetailsValidator;
 import client.protector.hazard.hazardprotectorclient.model.Common.DbResponse;
 import client.protector.hazard.hazardprotectorclient.model.User.RegisterUser;
 import client.protector.hazard.hazardprotectorclient.model.User.User;
@@ -46,11 +47,13 @@ public class RegisterActivity extends AppCompatActivity
 
     public void registerUser(View view)
     {
+        findViewById(R.id.loadingRegister).setVisibility(View.VISIBLE);
         TextView txtFirstname = (TextView) findViewById(R.id.txtFirstname);
         TextView txtSurname = (TextView) findViewById(R.id.txtSurname);
         String firstname = txtFirstname.getText().toString();
         String surname = txtSurname.getText().toString();
-        boolean validForm = validateForm(txtFirstname,txtSurname,firstname,surname);
+        DetailsValidator validator = new DetailsValidator(this);
+        boolean validForm = validator.validateForm(txtFirstname,txtSurname);
         if(validForm == false)
         {
             return;
@@ -90,6 +93,7 @@ public class RegisterActivity extends AppCompatActivity
                 user.save();
                 App.setUser(user);
                 GoToMain goToMain = new GoToMain(this);
+                findViewById(R.id.loadingRegister).setVisibility(View.GONE);
             }
 
         }
@@ -101,32 +105,6 @@ public class RegisterActivity extends AppCompatActivity
         }
     }
 
-    private boolean validateForm(TextView txtFirstname, TextView txtSurname, String firstname, String surname)
-    {
-        boolean result = false;
-        if(!firstname.equals("") && !surname.equals(""))
-        {
-            result = true;
-        }
-        else
-        {
-            if(firstname.equals(""))
-            {
-                txtFirstname.setTextColor(Color.RED);
-                Toast toast = Toast.makeText(this,R.string.firstname_missing, Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-            }
-            if(surname.equals(""))
-            {
-                txtSurname.setTextColor(Color.RED);
-                Toast toast = Toast.makeText(this,R.string.surname_missing, Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-            }
-        }
-        return result;
-    }
 
     private int extractRadius(String value)
     {

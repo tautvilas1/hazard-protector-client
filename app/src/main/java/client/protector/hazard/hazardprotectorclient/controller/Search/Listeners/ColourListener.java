@@ -51,6 +51,14 @@ public class ColourListener implements View.OnClickListener
                 break;
             case "green" : user.setColourCode(4);
                 break;
+            case "editRed" : user.setColourCode(1);
+                break;
+            case "editOrange" : user.setColourCode(2);
+                break;
+            case "editBlue" : user.setColourCode(3);
+                break;
+            case "editGreen" : user.setColourCode(4);
+                break;
             default: user.setColourCode(0);
                 break;
         }

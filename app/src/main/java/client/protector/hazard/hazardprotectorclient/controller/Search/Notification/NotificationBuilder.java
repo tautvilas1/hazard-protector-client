@@ -2,6 +2,8 @@ package client.protector.hazard.hazardprotectorclient.controller.Search.Notifica
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import client.protector.hazard.hazardprotectorclient.R;
@@ -17,12 +19,14 @@ public class NotificationBuilder
     private Context context;
     public NotificationBuilder(Context context)
     {
+        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         this.context = context;
         notificationBuilder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.logo)
                         .setContentTitle("Hazard Protector")
-                        .setContentText("A hazard in your area was detected");
+                        .setContentText("A hazard in your area was detected")
+                        .setSound(sound);
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
     }

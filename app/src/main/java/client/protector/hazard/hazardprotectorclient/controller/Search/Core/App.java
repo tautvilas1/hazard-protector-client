@@ -13,7 +13,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.ArrayList;
+import java.util.Observer;
+
 import client.protector.hazard.hazardprotectorclient.R;
+import client.protector.hazard.hazardprotectorclient.model.Articles.Article;
 import client.protector.hazard.hazardprotectorclient.model.User.User;
 
 /**
@@ -23,7 +27,7 @@ public class App
 {
 
     public static User user;
-
+    public static ArrayList<Article> articlesList = new ArrayList<Article>();
     public static void setUser(User u)
     {
         user = u;

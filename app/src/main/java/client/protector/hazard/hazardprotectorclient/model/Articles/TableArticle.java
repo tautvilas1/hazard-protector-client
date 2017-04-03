@@ -17,11 +17,16 @@ import java.util.concurrent.Callable;
 
 public class TableArticle implements Callable<ArrayList> {
 
+    private int offset;
+    private int limit;
     private Context context;
 
     private ArrayList<JSONObject> articlesList = new ArrayList<JSONObject>();
 
-    public TableArticle(Context context) {
+    public TableArticle(Context context, int limit, int offset)
+    {
+        this.limit = limit;
+        this.offset = offset;
         this.context = context;
     }
 
@@ -30,12 +35,11 @@ public class TableArticle implements Callable<ArrayList> {
         try
         {
             Document doc = Jsoup.connect("http://www.odontologijos-erdve.lt/hazardprotector/getArticles.php")
-                    .followRedirects(true)
-                    .ignoreContentType(true)
-                    .timeout(60000)
+                    .data("limit", String.valueOf(limit))
+                    .data("offset", String.valueOf(offset))
                     .userAgent("Mozilla")
-                    .execute()
-                    .parse();
+                    .timeout(20000)
+                    .post();
 
 
             String body = doc.body().text();
@@ -87,6 +91,7 @@ public class TableArticle implements Callable<ArrayList> {
                 article.setDescription(articles.get(i).getString("description"));
                 article.setLink(articles.get(i).getString("link"));
                 article.setFullDescription(articles.get(i).getString("fullDescription"));
+                article.setDateAdded(articles.get(i).getString("dateAdded"));
                 String tags = articles.get(i).getString("tags");
                 ArrayList<String> tagsList = new ArrayList<>();
                 String[] tagsListTemp = tags.split(",");

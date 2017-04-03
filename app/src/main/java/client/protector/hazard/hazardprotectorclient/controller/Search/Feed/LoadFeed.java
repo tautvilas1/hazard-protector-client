@@ -18,6 +18,7 @@ public class LoadFeed
     private Context context;
     private ArrayList<Article> articlesList;
     private ListView articlesListView;
+    public ListItemAdapter adapter;
 
     public LoadFeed(Context context, ArrayList<Article> articlesList, ListView articlesListView)
     {
@@ -28,7 +29,7 @@ public class LoadFeed
 
     public void populateList()
     {
-
-        articlesListView.setAdapter(new ListItemAdapter(context,articlesList));
+        adapter = new ListItemAdapter(context,articlesList);
+        articlesListView.setAdapter(adapter);
     }
 }

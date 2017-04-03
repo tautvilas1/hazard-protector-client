@@ -84,9 +84,7 @@ public class MainActivity extends AppCompatActivity implements
     private H_LocationStatus locationStatus = new H_LocationStatus();
     private LocationManager locationManager;
     private Criteria criteria;
-
     private String provider;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -280,8 +278,8 @@ public class MainActivity extends AppCompatActivity implements
     public void loadFeed()
     {
         getArticles();
-        ArticleSort articleSort = new ArticleSort(articlesList);
-        articleSort.sortByDate();
+        ArticleSort articleSort = new ArticleSort();
+        articleSort.sortByDate(articlesList);
         Collections.reverse(articlesList);
         ListView articlesListView = (ListView) findViewById(R.id.articlesListView);
         if(articlesList.size() > 0)
@@ -303,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements
     public void getArticles()
     {
         ExecutorService es = Executors.newSingleThreadExecutor();
-        Future f = es.submit(new TableArticle(this));
+        Future f = es.submit(new TableArticle(this,10,0));
         try
         {
             articlesList = (ArrayList<Article>) f.get();

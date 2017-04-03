@@ -13,7 +13,18 @@ import android.widget.Toast;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Notification.NotificationBuilder;
+import client.protector.hazard.hazardprotectorclient.controller.Search.Search.Finder;
+import client.protector.hazard.hazardprotectorclient.model.Articles.Article;
+import client.protector.hazard.hazardprotectorclient.model.User.GetUser;
+import client.protector.hazard.hazardprotectorclient.model.User.User;
 
 public class MyGcmListenerService extends GcmListenerService
 {
@@ -30,6 +41,21 @@ public class MyGcmListenerService extends GcmListenerService
     {
 
         String message = data.getString("message");
+        ExecutorService es = Executors.newSingleThreadExecutor();
+        Future f = es.submit(new GetUser(this, App.user.getGcm_id()));
+        try
+        {
+            User getUpdates = (User) f.get();
+            App.user.setHazardArticlesList(getUpdates.getHazardArticlesList());
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+        catch (ExecutionException e)
+        {
+            e.printStackTrace();
+        }
         Log.d("log", String.valueOf(data));
         NotificationBuilder notificationBuilder = new NotificationBuilder(this);
         notificationBuilder.sendNotification();

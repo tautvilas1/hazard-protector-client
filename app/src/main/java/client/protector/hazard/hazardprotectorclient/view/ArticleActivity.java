@@ -1,5 +1,6 @@
 package client.protector.hazard.hazardprotectorclient.view;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import client.protector.hazard.hazardprotectorclient.R;
+import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Image.LoadImage;
 import client.protector.hazard.hazardprotectorclient.model.Articles.Article;
 
@@ -57,7 +59,8 @@ public class ArticleActivity extends AppCompatActivity {
 
     public void openSettings(View view)
     {
-        System.out.println("Hello world");
+        Intent intent = new Intent(this,SettingsActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -96,7 +99,7 @@ public class ArticleActivity extends AppCompatActivity {
         }
         lblDescription.setText(description);
 
-        lblPublishDate.setText(article.getPublishDate());
+        lblPublishDate.setText(article.getDateAdded());
 
         if(article.getThumbnail() != "")
         {
@@ -107,6 +110,12 @@ public class ArticleActivity extends AppCompatActivity {
         {
             imgMain.setImageResource(R.drawable.no_image);
         }
+    }
+
+    public void goToSource(View view)
+    {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(article.getLink()));
+        startActivity(intent);
     }
 
 

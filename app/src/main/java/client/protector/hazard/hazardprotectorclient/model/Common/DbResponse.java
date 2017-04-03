@@ -7,8 +7,8 @@ package client.protector.hazard.hazardprotectorclient.model.Common;
 public class DbResponse
 {
 
-    public int status;
-    public String msg;
+    public int status = 400;
+    public String msg = "Default error";
 
     public int getStatus() {
         return status;

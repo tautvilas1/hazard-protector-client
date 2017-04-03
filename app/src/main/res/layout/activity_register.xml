@@ -164,5 +164,14 @@
             android:onClick="registerUser"
             android:text="Finish" />
 
+        <ProgressBar
+            android:id="@+id/loadingRegister"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:indeterminate="true"
+            android:visibility="gone" />
+
     </LinearLayout>
 </RelativeLayout>
