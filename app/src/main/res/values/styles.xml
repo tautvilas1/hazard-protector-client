@@ -8,17 +8,29 @@
 
     <style name="LightTest" parent="Theme.AppCompat.Light.NoActionBar" >
         <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="colorPrimary">@android:color/black</item>
-        <item name="android:colorBackground">#9e9e9e</item>
-        <item name="colorAccent">@android:color/holo_blue_dark</item>
+        <item name="colorPrimary">#004eb5</item>
+        <item name="android:colorBackground">#393e44</item>
+        <item name="colorAccent">#004eb5</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textColorPrimaryInverse">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="android:textColorSecondaryInverse">@android:color/white</item>
-        <item name="android:colorForeground">#9e9e9e</item>
-        <item name="android:windowBackground">@color/light_dark</item>
-        <item name="colorPrimaryDark">@color/primary_dark_material_light</item>
+        <item name="android:colorForeground">@android:color/black</item>
+        <item name="android:windowBackground">@color/background_colour</item>
+        <item name="android:textColorTertiary">@android:color/white</item>
+        <item name="colorPrimaryDark">@android:color/black</item>
 
+    </style>
+
+
+    <style name="OrangeTheme" parent="LightTest" >
+        <item name="colorPrimary">@android:color/holo_orange_dark</item>
+        <item name="colorAccent">@android:color/holo_orange_dark</item>
+        <item name="android:textColorTertiary">@android:color/white</item>
+    </style>
+
+    <style name="RedTheme" parent="OrangeTheme" >
+        <item name="colorPrimary">@android:color/holo_red_dark</item>
     </style>
 
 

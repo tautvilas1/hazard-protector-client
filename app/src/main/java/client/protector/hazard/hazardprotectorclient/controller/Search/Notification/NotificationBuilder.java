@@ -1,12 +1,15 @@
 package client.protector.hazard.hazardprotectorclient.controller.Search.Notification;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import client.protector.hazard.hazardprotectorclient.R;
+import client.protector.hazard.hazardprotectorclient.view.FeedActivity;
 
 /**
  * Created by Tautvilas on 14/03/2017.

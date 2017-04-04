@@ -1,6 +1,7 @@
 package client.protector.hazard.hazardprotectorclient.view;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -83,6 +84,7 @@ public class FeedActivity extends AppCompatActivity implements HazardsFeed.OnFra
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setTheme(App.theme);
         setContentView(R.layout.activity_feed);
         setupToolbar();
         startRegistrationService();
@@ -97,6 +99,7 @@ public class FeedActivity extends AppCompatActivity implements HazardsFeed.OnFra
         buildLocationManager();
         buildLocationServices();
         promptLocationServices();
+        App.getArticles(this,300,0);
     }
 
     private void setupToolbar()
@@ -167,6 +170,12 @@ public class FeedActivity extends AppCompatActivity implements HazardsFeed.OnFra
     {
         googleApiClient.disconnect();
         super.onStop();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
     }
 
     @Override

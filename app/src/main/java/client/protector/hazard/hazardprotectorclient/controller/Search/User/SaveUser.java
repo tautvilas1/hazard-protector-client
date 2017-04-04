@@ -59,9 +59,10 @@ public class SaveUser implements Callable<DbResponse>
                     .post();
 
             response = new JSONObject(doc.body().text());
-            System.out.println("response save: "+dbResponse.toString());
             dbResponse.setMsg(response.getString("msg"));
             dbResponse.setStatus(response.getInt("status"));
+            System.out.println("response save: "+dbResponse.toString());
+
         }
         catch (IOException e)
         {

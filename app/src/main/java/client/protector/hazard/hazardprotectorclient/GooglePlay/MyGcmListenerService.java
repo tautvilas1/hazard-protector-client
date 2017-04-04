@@ -40,13 +40,15 @@ public class MyGcmListenerService extends GcmListenerService
     public void onMessageReceived(String from, Bundle data)
     {
 
-        String message = data.getString("message");
+        String gcm_id = data.getString("message");
         ExecutorService es = Executors.newSingleThreadExecutor();
-        Future f = es.submit(new GetUser(this, App.user.getGcm_id()));
+        Future f = es.submit(new GetUser(this, gcm_id));
         try
         {
             User getUpdates = (User) f.get();
             App.user.setHazardArticlesList(getUpdates.getHazardArticlesList());
+            NotificationBuilder notificationBuilder = new NotificationBuilder(this);
+            notificationBuilder.sendNotification();
         }
         catch (InterruptedException e)
         {
@@ -57,12 +59,7 @@ public class MyGcmListenerService extends GcmListenerService
             e.printStackTrace();
         }
         Log.d("log", String.valueOf(data));
-        NotificationBuilder notificationBuilder = new NotificationBuilder(this);
-        notificationBuilder.sendNotification();
+
     }
 
-//    private void sendNotification(String message, int i)
-//    {
-//
-//    }
 }

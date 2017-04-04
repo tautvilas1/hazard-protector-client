@@ -3,14 +3,18 @@ package client.protector.hazard.hazardprotectorclient.controller.Search.Listener
 /**
  * Created by Tautvilas on 06/03/2017.
  */
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.Image;
 import android.view.View;
 import android.widget.ImageButton;
 
 import client.protector.hazard.hazardprotectorclient.R;
+import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
 import client.protector.hazard.hazardprotectorclient.model.User.User;
+import client.protector.hazard.hazardprotectorclient.view.SettingsActivity;
 
 
 public class ColourListener implements View.OnClickListener
@@ -46,6 +50,7 @@ public class ColourListener implements View.OnClickListener
             case "red" : user.setColourCode(1);
                 break;
             case "orange" : user.setColourCode(2);
+                App.theme = R.style.OrangeTheme;
                 break;
             case "blue" : user.setColourCode(3);
                 break;
@@ -54,6 +59,10 @@ public class ColourListener implements View.OnClickListener
             case "editRed" : user.setColourCode(1);
                 break;
             case "editOrange" : user.setColourCode(2);
+                App.theme = R.style.OrangeTheme;
+                ((Activity)(context)).finish();
+                context.startActivity(new Intent(context, SettingsActivity.class));
+
                 break;
             case "editBlue" : user.setColourCode(3);
                 break;

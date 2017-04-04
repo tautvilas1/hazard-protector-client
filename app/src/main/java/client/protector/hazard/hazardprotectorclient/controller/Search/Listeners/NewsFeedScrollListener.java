@@ -29,15 +29,13 @@ import client.protector.hazard.hazardprotectorclient.model.Articles.TableArticle
 
 public class NewsFeedScrollListener implements AbsListView.OnScrollListener
 {
-    private ProgressBar loading;
     public boolean isLoading = false;
     private Context context;
     private ListView articlesListView;
-    public NewsFeedScrollListener(Context context, ListView articlesListView, ProgressBar loading)
+    public NewsFeedScrollListener(Context context, ListView articlesListView)
     {
         this.context = context;
         this.articlesListView = articlesListView;
-        this.loading = loading;
     }
 
     @Override
@@ -64,7 +62,6 @@ public class NewsFeedScrollListener implements AbsListView.OnScrollListener
         try
         {
             isLoading = true;
-            loading.setVisibility(View.VISIBLE);
             ArrayList<Article> newArticles = (ArrayList<Article>) f.get();
             ArrayList<Article> refinedArticles = new ArticleSort().sortByPreferences(newArticles);
             App.articlesList.addAll(refinedArticles);
@@ -73,7 +70,6 @@ public class NewsFeedScrollListener implements AbsListView.OnScrollListener
             loadFeed.populateList();
             loadFeed.adapter.notifyDataSetChanged();
             articlesListView.setSelection(offset-3);
-            loading.setVisibility(View.INVISIBLE);
             isLoading = false;
         }
         catch (InterruptedException e)

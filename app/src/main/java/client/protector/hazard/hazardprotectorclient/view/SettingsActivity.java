@@ -42,12 +42,14 @@ public class SettingsActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setTheme(App.theme);
         setContentView(R.layout.activity_settings);
         user = App.user;
         setupActionBar();
         getWidgets();
         addListeners();
         loadData();
+
     }
 
     @Override

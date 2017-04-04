@@ -42,7 +42,6 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
             android:text="Include in my news feed"
-            android:textColor="@android:color/black"
             android:textSize="20sp" />
 
         <GridLayout
@@ -84,7 +83,8 @@
                 android:layout_column="0"
                 android:layout_row="0"
                 android:checked="true"
-                android:text="Terror news" />
+                android:text="Terror news"
+                android:textColor="textcolor" />
 
             <CheckBox
                 android:id="@+id/ckEditPolitical"
@@ -93,7 +93,8 @@
                 android:layout_column="0"
                 android:layout_row="2"
                 android:checked="true"
-                android:text="Political News" />
+                android:text="Political News"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <CheckBox
                 android:id="@+id/ckEditCriminal"

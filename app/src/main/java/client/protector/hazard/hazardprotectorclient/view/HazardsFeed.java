@@ -1,10 +1,14 @@
 package client.protector.hazard.hazardprotectorclient.view;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ExecutionException;
@@ -25,7 +30,7 @@ import client.protector.hazard.hazardprotectorclient.controller.Search.Article.A
 import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Feed.LoadFeed;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Search.FindArticlesById;
-import client.protector.hazard.hazardprotectorclient.controller.Search.Search.Finder;
+
 import client.protector.hazard.hazardprotectorclient.model.Articles.Article;
 import client.protector.hazard.hazardprotectorclient.model.Articles.TableArticle;
 
@@ -41,7 +46,18 @@ public class HazardsFeed extends Fragment implements Observer
 
     private OnFragmentInteractionListener mListener;
     private ArrayList<Article> articlesList, hazardousArticlesList;
+    private ListView articlesListView;
     private View view;
+    private TextView txtNewsFeed;
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver()
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            Log.d("log","new hazard articles received");
+        }
+    };
 
     public HazardsFeed()
     {
@@ -66,78 +82,79 @@ public class HazardsFeed extends Fragment implements Observer
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        getActivity().registerReceiver(broadcastReceiver, new IntentFilter("notificationListener"));
         App.user.addObserver(this);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState)
     {
         view = inflater.inflate(R.layout.fragment_hazards_feed, container, false);
-        getArticles();
+        articlesListView = (ListView) view.findViewById(R.id.articlesListView2);
+        txtNewsFeed = (TextView) view.findViewById(R.id.lblHazards);
         getHazardousArticles();
         loadFeed(view);
         return view;
     }
 
-
-    public void getArticles()
+    private boolean getHazardousArticles()
     {
-        ExecutorService es = Executors.newSingleThreadExecutor();
-        Future f = es.submit(new TableArticle(getActivity(),300,0));
-        try
+        boolean result = false;
+        if(App.articlesList.size() > 0)
         {
-            articlesList = (ArrayList<Article>) f.get();
+            ExecutorService es = Executors.newSingleThreadExecutor();
+            Future f = es.submit(new FindArticlesById(App.articlesList, App.user.getHazardArticlesList()));
+            try
+            {
+                hazardousArticlesList = (ArrayList<Article>) f.get();
+                if(hazardousArticlesList.size() == 0)
+                {
+                    displayError("Unable to find hazardous articles, you are hazard free!");
+                    result = false;
+                }
+                else
+                {
+                    result = true;
+                }
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+            catch (ExecutionException e)
+            {
+                e.printStackTrace();
+            }
         }
-        catch (InterruptedException e)
+        else
         {
-            e.printStackTrace();
+            result = false;
+            displayError("No articles in global article list");
         }
-        catch (ExecutionException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    private void getHazardousArticles()
-    {
-        ExecutorService es = Executors.newSingleThreadExecutor();
-        Future f = es.submit(new FindArticlesById(articlesList, App.user.getHazardArticlesList()));
-        try
-        {
-            hazardousArticlesList = (ArrayList<Article>) f.get();
-        }
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-        catch (ExecutionException e)
-        {
-            e.printStackTrace();
-        }
+        return result;
     }
 
     public void loadFeed(View view)
     {
-        getArticles();
-        getHazardousArticles();
-        ArticleSort articleSort = new ArticleSort();
-        articleSort.sortByDate(hazardousArticlesList);
-        Collections.reverse(hazardousArticlesList);
-        ListView articlesListView = (ListView) view.findViewById(R.id.articlesListView2);
-        if(hazardousArticlesList.size() > 0)
+        if(getHazardousArticles())
         {
+            ArticleSort articleSort = new ArticleSort();
+            articleSort.sortByDate(hazardousArticlesList);
+            Collections.reverse(hazardousArticlesList);
+            Collections.shuffle(hazardousArticlesList);
+            articlesListView.setVisibility(View.VISIBLE);
+            txtNewsFeed.setVisibility(View.GONE);
             LoadFeed loadFeed = new LoadFeed(getActivity(),hazardousArticlesList,articlesListView);
             loadFeed.populateList();
         }
-        else
-        {
-            TextView txtNewsFeed = (TextView) view.findViewById(R.id.lblHazards);
-            articlesListView.setVisibility(View.INVISIBLE);
-            txtNewsFeed.setVisibility(View.VISIBLE);
-            txtNewsFeed.setTextColor(Color.RED);
-            txtNewsFeed.setText("No articles could be loaded");
-        }
+    }
+
+    private void displayError(String msg)
+    {
+        articlesListView.setVisibility(View.INVISIBLE);
+        txtNewsFeed.setVisibility(View.VISIBLE);
+        txtNewsFeed.setTextColor(Color.RED);
+        txtNewsFeed.setText(msg);
     }
 
 
@@ -148,6 +165,7 @@ public class HazardsFeed extends Fragment implements Observer
         if (context instanceof OnFragmentInteractionListener)
         {
             mListener = (OnFragmentInteractionListener) context;
+
         }
         else
         {
@@ -164,13 +182,37 @@ public class HazardsFeed extends Fragment implements Observer
     }
 
     @Override
-    public void update(Observable o, Object arg)
+    public void onResume()
     {
-        getArticles();
-        getHazardousArticles();
-        loadFeed(view);
+        super.onResume();
+        getActivity().registerReceiver(broadcastReceiver, new IntentFilter("notificationListener"));
     }
 
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+    }
+
+    @Override
+    public void update(Observable o, Object arg)
+    {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                App.getArticles(getActivity(), 300, 0);
+                getHazardousArticles();
+                loadFeed(view);
+            }
+        });
+
+    }
 
     public interface OnFragmentInteractionListener
     {
