@@ -32,6 +32,7 @@ public class ArticleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setTheme(App.theme);
         setContentView(R.layout.activity_article);
         setupActionBar();
         getArticle();

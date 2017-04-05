@@ -48,30 +48,34 @@ public class ColourListener implements View.OnClickListener
         switch (colourSelected)
         {
             case "red" : user.setColourCode(1);
+                App.theme = R.style.RedTheme;
                 break;
             case "orange" : user.setColourCode(2);
                 App.theme = R.style.OrangeTheme;
                 break;
             case "blue" : user.setColourCode(3);
+                App.theme = R.style.LightTest;
                 break;
             case "green" : user.setColourCode(4);
+                App.theme = R.style.GreenTheme;
                 break;
             case "editRed" : user.setColourCode(1);
+                App.theme = R.style.RedTheme;
                 break;
             case "editOrange" : user.setColourCode(2);
                 App.theme = R.style.OrangeTheme;
-                ((Activity)(context)).finish();
-                context.startActivity(new Intent(context, SettingsActivity.class));
-
                 break;
             case "editBlue" : user.setColourCode(3);
+                App.theme = R.style.LightTest;
                 break;
             case "editGreen" : user.setColourCode(4);
+                App.theme = R.style.GreenTheme;
                 break;
             default: user.setColourCode(0);
                 break;
         }
-
+        ((Activity)(context)).finish();
+        context.startActivity(new Intent(context, SettingsActivity.class));
         btnColour.setBackgroundColor(Color.RED);
     }
 }

@@ -49,6 +49,7 @@ public class StartingActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setTheme(App.theme);
         setContentView(R.layout.activity_starting);
         getUser();
     }

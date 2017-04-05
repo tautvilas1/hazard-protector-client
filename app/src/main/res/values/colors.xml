@@ -6,4 +6,11 @@
     <color name="primary_material_light_1">#000000</color>
     <color name="primary_text_material_dark">#000000</color>
     <color name="background_colour">#393e44</color>
+    <color name="darkBlue">#0D47A1</color>
+    <color name="white">#FFFFFF</color>
+    <color name="redColor">@android:color/holo_red_dark</color>
+    <color name="yellowColor">#FFD700</color>
+    <color name="blueColor">#0D47A1</color>
+    <color name="greenColor">@android:color/holo_green_dark</color>
+
 </resources>
