@@ -1,4 +1,4 @@
-package client.protector.hazard.hazardprotectorclient.model.User;
+package client.protector.hazard.hazardprotectorclient.controller.Search.User;
 
 import android.content.Context;
 import android.util.Log;
@@ -16,6 +16,7 @@ import java.util.concurrent.Callable;
 
 
 import client.protector.hazard.hazardprotectorclient.model.Common.DbResponse;
+import client.protector.hazard.hazardprotectorclient.model.User.User;
 
 import static org.jsoup.Jsoup.connect;
 
@@ -23,16 +24,15 @@ import static org.jsoup.Jsoup.connect;
 public class GetUser implements Callable<User>
 {
 
-    private Context context;
     private String gcmId;
 
-    public GetUser(Context context,String gcmId)
+    public GetUser(String gcmId)
     {
-        this.context = context;
         this.gcmId = gcmId;
     }
 
-    public User getData() throws JSONException {
+    public User getData()
+    {
         String result = null;
         try
         {

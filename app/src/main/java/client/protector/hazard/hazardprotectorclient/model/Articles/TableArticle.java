@@ -15,22 +15,22 @@ import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 
-public class TableArticle implements Callable<ArrayList> {
+public class TableArticle implements Callable<ArrayList>
+{
 
     private int offset;
     private int limit;
-    private Context context;
 
     private ArrayList<JSONObject> articlesList = new ArrayList<JSONObject>();
 
-    public TableArticle(Context context, int limit, int offset)
+    public TableArticle(int limit, int offset)
     {
         this.limit = limit;
         this.offset = offset;
-        this.context = context;
     }
 
-    public ArrayList getData() {
+    public ArrayList getData()
+    {
         String result = null;
         try
         {
@@ -42,9 +42,7 @@ public class TableArticle implements Callable<ArrayList> {
                     .post();
 
 
-            String body = doc.body().text();
-            result = body;
-
+            result = doc.body().text();
         }
         catch (IOException e)
         {
@@ -78,9 +76,11 @@ public class TableArticle implements Callable<ArrayList> {
         }
     }
 
-    public ArrayList<Article> jsonToJava(ArrayList<JSONObject> articles) {
+    public ArrayList<Article> jsonToJava(ArrayList<JSONObject> articles)
+    {
         ArrayList<Article> articlesList = new ArrayList<Article>();
-        for(int i = 0; i < articles.size();i++) {
+        for(int i = 0; i < articles.size();i++)
+        {
             Article article = new Article();
             try {
                 article.setId(Integer.parseInt(articles.get(i).getString("id")));
@@ -95,13 +95,15 @@ public class TableArticle implements Callable<ArrayList> {
                 String tags = articles.get(i).getString("tags");
                 ArrayList<String> tagsList = new ArrayList<>();
                 String[] tagsListTemp = tags.split(",");
-                for (String tag : tagsListTemp) {
+                for (String tag : tagsListTemp)
+                {
                     tagsList.add(tag);
                 }
                 article.setTags(tagsList);
                 articlesList.add(article);
             }
-            catch (JSONException e) {
+            catch (JSONException e)
+            {
                 e.printStackTrace();
             }
         }
@@ -109,7 +111,8 @@ public class TableArticle implements Callable<ArrayList> {
     }
 
     @Override
-    public ArrayList call() throws Exception {
+    public ArrayList call() throws Exception
+    {
         return getData();
     }
 }

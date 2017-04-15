@@ -301,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements
     public void getArticles()
     {
         ExecutorService es = Executors.newSingleThreadExecutor();
-        Future f = es.submit(new TableArticle(this,10,0));
+        Future f = es.submit(new TableArticle(10,0));
         try
         {
             articlesList = (ArrayList<Article>) f.get();

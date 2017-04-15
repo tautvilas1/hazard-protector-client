@@ -39,7 +39,7 @@ import client.protector.hazard.hazardprotectorclient.GooglePlay.RegistrationServ
 import client.protector.hazard.hazardprotectorclient.R;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Common.GoToMain;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
-import client.protector.hazard.hazardprotectorclient.model.User.GetUser;
+import client.protector.hazard.hazardprotectorclient.controller.Search.User.GetUser;
 import client.protector.hazard.hazardprotectorclient.model.User.User;
 
 public class StartingActivity extends AppCompatActivity
@@ -59,7 +59,7 @@ public class StartingActivity extends AppCompatActivity
     {
         String gcmId = InstanceID.getInstance(this).getId();
         ExecutorService es = Executors.newSingleThreadExecutor();
-        Future f = es.submit(new GetUser(this,gcmId));
+        Future f = es.submit(new GetUser(gcmId));
         User user = null;
         try
         {

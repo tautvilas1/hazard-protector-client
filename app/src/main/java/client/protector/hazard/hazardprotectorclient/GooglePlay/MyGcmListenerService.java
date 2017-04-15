@@ -21,9 +21,8 @@ import java.util.concurrent.Future;
 
 import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Notification.NotificationBuilder;
-import client.protector.hazard.hazardprotectorclient.controller.Search.Search.Finder;
-import client.protector.hazard.hazardprotectorclient.model.Articles.Article;
-import client.protector.hazard.hazardprotectorclient.model.User.GetUser;
+
+import client.protector.hazard.hazardprotectorclient.controller.Search.User.GetUser;
 import client.protector.hazard.hazardprotectorclient.model.User.User;
 
 public class MyGcmListenerService extends GcmListenerService
@@ -42,7 +41,7 @@ public class MyGcmListenerService extends GcmListenerService
 
         String gcm_id = data.getString("message");
         ExecutorService es = Executors.newSingleThreadExecutor();
-        Future f = es.submit(new GetUser(this, gcm_id));
+        Future f = es.submit(new GetUser(gcm_id));
         try
         {
             User getUpdates = (User) f.get();

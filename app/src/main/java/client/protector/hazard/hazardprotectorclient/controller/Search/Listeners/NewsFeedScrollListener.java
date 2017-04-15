@@ -58,7 +58,7 @@ public class NewsFeedScrollListener implements AbsListView.OnScrollListener
         ExecutorService es = Executors.newSingleThreadExecutor();
         int limit = 10;
         int offset = App.articlesList.size();
-        Future f = es.submit(new TableArticle(context,limit,offset));
+        Future f = es.submit(new TableArticle(limit,offset));
         try
         {
             isLoading = true;

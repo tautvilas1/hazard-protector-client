@@ -43,7 +43,7 @@ public class App
     public static ArrayList<Article> getArticles(Context context, int limit, int offset)
     {
         ExecutorService es = Executors.newSingleThreadExecutor();
-        Future f = es.submit(new TableArticle(context,limit,offset));
+        Future f = es.submit(new TableArticle(limit,offset));
         try
         {
             articlesList = (ArrayList<Article>) f.get();
