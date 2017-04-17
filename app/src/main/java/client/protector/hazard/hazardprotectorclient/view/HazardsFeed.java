@@ -32,7 +32,6 @@ import client.protector.hazard.hazardprotectorclient.controller.Search.Feed.Load
 import client.protector.hazard.hazardprotectorclient.controller.Search.Search.FindArticlesById;
 
 import client.protector.hazard.hazardprotectorclient.model.Articles.Article;
-import client.protector.hazard.hazardprotectorclient.model.Articles.TableArticle;
 
 public class HazardsFeed extends Fragment implements Observer
 {
@@ -192,6 +191,7 @@ public class HazardsFeed extends Fragment implements Observer
     public void onPause()
     {
         super.onPause();
+        getActivity().unregisterReceiver(broadcastReceiver);
     }
 
     @Override

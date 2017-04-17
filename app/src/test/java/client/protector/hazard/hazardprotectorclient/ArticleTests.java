@@ -11,7 +11,7 @@ import java.util.concurrent.Future;
 
 import client.protector.hazard.hazardprotectorclient.controller.Search.Search.FindArticlesById;
 import client.protector.hazard.hazardprotectorclient.model.Articles.Article;
-import client.protector.hazard.hazardprotectorclient.model.Articles.TableArticle;
+import client.protector.hazard.hazardprotectorclient.controller.Search.Article.GetArticles;
 
 import static junit.framework.Assert.assertTrue;
 
@@ -29,7 +29,7 @@ public class ArticleTests
     {
         int limit = 10;
         int offset = 0;
-        Future future = es.submit(new TableArticle(limit,offset));
+        Future future = es.submit(new GetArticles(limit,offset));
 
         try
         {

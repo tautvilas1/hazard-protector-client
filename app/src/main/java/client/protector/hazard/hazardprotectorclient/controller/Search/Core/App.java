@@ -1,21 +1,8 @@
 package client.protector.hazard.hazardprotectorclient.controller.Search.Core;
 
-import android.Manifest;
-import android.app.Application;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
-import java.util.Observer;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,7 +10,7 @@ import java.util.concurrent.Future;
 
 import client.protector.hazard.hazardprotectorclient.R;
 import client.protector.hazard.hazardprotectorclient.model.Articles.Article;
-import client.protector.hazard.hazardprotectorclient.model.Articles.TableArticle;
+import client.protector.hazard.hazardprotectorclient.controller.Search.Article.GetArticles;
 import client.protector.hazard.hazardprotectorclient.model.User.User;
 
 /**
@@ -43,7 +30,7 @@ public class App
     public static ArrayList<Article> getArticles(Context context, int limit, int offset)
     {
         ExecutorService es = Executors.newSingleThreadExecutor();
-        Future f = es.submit(new TableArticle(limit,offset));
+        Future f = es.submit(new GetArticles(limit,offset));
         try
         {
             articlesList = (ArrayList<Article>) f.get();

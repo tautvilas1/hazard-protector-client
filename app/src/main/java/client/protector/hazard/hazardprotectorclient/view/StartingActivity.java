@@ -1,41 +1,23 @@
 package client.protector.hazard.hazardprotectorclient.view;
 
-import android.Manifest;
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.ProgressBar;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import client.protector.hazard.hazardprotectorclient.GooglePlay.RegistrationService;
 import client.protector.hazard.hazardprotectorclient.R;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Common.GoToMain;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
@@ -44,6 +26,8 @@ import client.protector.hazard.hazardprotectorclient.model.User.User;
 
 public class StartingActivity extends AppCompatActivity
 {
+    private ProgressBar loader;
+    private Button btnRetry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,38 +35,57 @@ public class StartingActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setTheme(App.theme);
         setContentView(R.layout.activity_starting);
+        getWidgets();
         getUser();
+    }
+
+    private void getWidgets()
+    {
+        loader = (ProgressBar) findViewById(R.id.loaderRetry);
+        btnRetry = (Button) findViewById(R.id.btnConnect);
+    }
+
+    private boolean isNetworkAvailable()
+    {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 
     public void getUser()
     {
-        String gcmId = InstanceID.getInstance(this).getId();
-        ExecutorService es = Executors.newSingleThreadExecutor();
-        Future f = es.submit(new GetUser(gcmId));
-        User user = null;
-        try
+        if(isNetworkAvailable())
         {
-            user = (User) f.get();
-            if(user.getFirstname() == "")
+            String gcmId = InstanceID.getInstance(this).getId();
+            ExecutorService es = Executors.newSingleThreadExecutor();
+            Future f = es.submit(new GetUser(gcmId));
+            User user = null;
+            try
             {
-                Intent register = new Intent(this,RegisterActivity.class);
-                startActivity(register);
+                user = (User) f.get();
+                if(user.getFirstname() == "")
+                {
+                    Intent register = new Intent(this,RegisterActivity.class);
+                    startActivity(register);
+                }
+                else
+                {
+                    App.setUser(user);
+                    GoToMain goToMain = new GoToMain(this);
+                }
             }
-            else
+            catch (InterruptedException e)
             {
-                App.setUser(user);
-                GoToMain goToMain = new GoToMain(this);
+                e.printStackTrace();
+            }
+            catch (ExecutionException e)
+            {
+                e.printStackTrace();
             }
         }
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-        catch (ExecutionException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
@@ -94,6 +97,22 @@ public class StartingActivity extends AppCompatActivity
 
     public void clickRetry(View view)
     {
+
         getUser();
+        new CountDownTimer(2000, 1000)
+        {
+            public void onFinish()
+            {
+                loader.setVisibility(View.INVISIBLE);
+                btnRetry.setVisibility(View.VISIBLE);
+            }
+
+            public void onTick(long millisUntilFinished)
+            {
+                btnRetry.setVisibility(View.INVISIBLE);
+                loader.setVisibility(View.VISIBLE);
+            }
+        }.start();
+
     }
 }

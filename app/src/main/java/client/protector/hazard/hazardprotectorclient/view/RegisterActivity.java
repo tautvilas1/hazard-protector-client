@@ -1,17 +1,12 @@
 package client.protector.hazard.hazardprotectorclient.view;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.iid.InstanceID;
 
@@ -26,7 +21,7 @@ import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Listeners.ColourListener;
 import client.protector.hazard.hazardprotectorclient.controller.Search.User.DetailsValidator;
 import client.protector.hazard.hazardprotectorclient.model.Common.DbResponse;
-import client.protector.hazard.hazardprotectorclient.model.User.RegisterUser;
+import client.protector.hazard.hazardprotectorclient.controller.Search.User.RegisterUser;
 import client.protector.hazard.hazardprotectorclient.model.User.User;
 
 public class RegisterActivity extends AppCompatActivity

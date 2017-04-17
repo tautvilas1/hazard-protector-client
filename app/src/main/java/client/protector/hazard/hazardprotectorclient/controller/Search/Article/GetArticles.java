@@ -1,4 +1,4 @@
-package client.protector.hazard.hazardprotectorclient.model.Articles;
+package client.protector.hazard.hazardprotectorclient.controller.Search.Article;
 
 
 import android.content.Context;
@@ -14,8 +14,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
+import client.protector.hazard.hazardprotectorclient.model.Articles.Article;
 
-public class TableArticle implements Callable<ArrayList>
+
+public class GetArticles implements Callable<ArrayList>
 {
 
     private int offset;
@@ -23,7 +25,7 @@ public class TableArticle implements Callable<ArrayList>
 
     private ArrayList<JSONObject> articlesList = new ArrayList<JSONObject>();
 
-    public TableArticle(int limit, int offset)
+    public GetArticles(int limit, int offset)
     {
         this.limit = limit;
         this.offset = offset;

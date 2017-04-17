@@ -1,4 +1,4 @@
-package client.protector.hazard.hazardprotectorclient.model.User;
+package client.protector.hazard.hazardprotectorclient.controller.Search.User;
 
 import android.util.Log;
 

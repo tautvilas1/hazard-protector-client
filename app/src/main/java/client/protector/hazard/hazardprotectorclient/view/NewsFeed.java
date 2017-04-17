@@ -10,23 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import client.protector.hazard.hazardprotectorclient.R;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Article.ArticleSort;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Feed.LoadFeed;
-import client.protector.hazard.hazardprotectorclient.controller.Search.Listeners.NewsFeedScrollListener;
 import client.protector.hazard.hazardprotectorclient.model.Articles.Article;
-import client.protector.hazard.hazardprotectorclient.model.Articles.TableArticle;
 
 /**
  * A simple {@link Fragment} subclass.

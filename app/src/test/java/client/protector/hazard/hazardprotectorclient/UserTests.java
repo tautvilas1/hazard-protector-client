@@ -13,7 +13,7 @@ import client.protector.hazard.hazardprotectorclient.controller.Search.User.GetU
 import client.protector.hazard.hazardprotectorclient.controller.Search.User.SaveUser;
 import client.protector.hazard.hazardprotectorclient.model.Common.DbResponse;
 
-import client.protector.hazard.hazardprotectorclient.model.User.RegisterUser;
+import client.protector.hazard.hazardprotectorclient.controller.Search.User.RegisterUser;
 import client.protector.hazard.hazardprotectorclient.model.User.User;
 
 import static junit.framework.Assert.assertEquals;

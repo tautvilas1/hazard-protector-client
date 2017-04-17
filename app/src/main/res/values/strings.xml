@@ -9,12 +9,5 @@
     <string name="user_saved">Your details have been saved</string>
     <string name="user_not_saved">Sorry, your details were not saved</string>
 
-    <string-array name="radiusOptions">
-        <item>50 KM</item>
-        <item>100 KM</item>
-        <item>200 KM</item>
-        <item>500 KM</item>
-        <item>1000+ KM</item>
-    </string-array>
 
 </resources>

@@ -100,6 +100,24 @@ public class FeedActivity extends AppCompatActivity implements HazardsFeed.OnFra
         buildLocationServices();
         promptLocationServices();
         App.getArticles(this,300,0);
+        openTabFromIntent();
+    }
+
+    private void openTabFromIntent()
+    {
+        if(getIntent().getStringExtra("tab") != null)
+        {
+            String tab = getIntent().getStringExtra("tab");
+            if(tab.equals("hazard"))
+            {
+                viewPager.setCurrentItem(1);
+
+            }
+            else if(tab.equals("regular"))
+            {
+                viewPager.setCurrentItem(0);
+            }
+        }
     }
 
     private void setupToolbar()

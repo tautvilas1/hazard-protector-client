@@ -14,15 +14,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +26,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -42,12 +35,10 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -58,10 +49,8 @@ import client.protector.hazard.hazardprotectorclient.R;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Article.ArticleSort;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Core.App;
 import client.protector.hazard.hazardprotectorclient.controller.Search.Feed.LoadFeed;
-import client.protector.hazard.hazardprotectorclient.controller.Search.Image.LoadImage;
-import client.protector.hazard.hazardprotectorclient.controller.Search.Search.Finder;
 import client.protector.hazard.hazardprotectorclient.model.Articles.Article;
-import client.protector.hazard.hazardprotectorclient.model.Articles.TableArticle;
+import client.protector.hazard.hazardprotectorclient.controller.Search.Article.GetArticles;
 import client.protector.hazard.hazardprotectorclient.model.Location.H_LocationBuilder;
 import client.protector.hazard.hazardprotectorclient.model.Location.H_LocationRequest;
 import client.protector.hazard.hazardprotectorclient.model.Location.H_LocationStatus;
@@ -301,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements
     public void getArticles()
     {
         ExecutorService es = Executors.newSingleThreadExecutor();
-        Future f = es.submit(new TableArticle(10,0));
+        Future f = es.submit(new GetArticles(10,0));
         try
         {
             articlesList = (ArrayList<Article>) f.get();
